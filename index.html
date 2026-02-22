@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle">Dashboard Marketing Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080a0f;--s1:#0d1018;--s2:#131720;--s3:#1a2030;
+  --bd:1px solid #1f2840;--text:#e8edf8;--muted:#5a6a8a;--faint:#2a3450;
+  --red:#e5322d;--blue:#1a7fe8;--teal:#0fcca0;--gold:#f0a830;
+  --purple:#8b5cf6;--pink:#ec4899;--orange:#f97316;--green:#22c55e;
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+*{scrollbar-width:thin;scrollbar-color:#2a3450 #0d1018}
+input,select,textarea,button{font-family:"DM Sans",sans-serif}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none}}
+.fade{animation:fadeUp .3s ease}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--purple);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
+
+/* ── AUTH SCREEN ── */
+#authScreen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease}
+#authScreen.hide{display:none}
+.auth-wrap{width:92%;max-width:420px;animation:slideDown .4s ease}
+.auth-logo{text-align:center;margin-bottom:32px}
+.auth-logo-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
+.auth-logo img{height:36px;object-fit:contain;border-radius:3px}
+.auth-title{font-family:"Plus Jakarta Sans",sans-serif;font-size:24px;font-weight:800;margin-bottom:4px;text-align:center}
+.auth-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:28px}
+.auth-card{background:var(--s1);border:var(--bd);border-radius:16px;padding:28px}
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;background:var(--s2);border-radius:9px;padding:3px}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;border-radius:7px;color:var(--muted);border:none;background:transparent;transition:.15s}
+.auth-tab.on{background:var(--s3);color:var(--text);border:var(--bd)}
+.auth-fl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
+.auth-inp{width:100%;background:var(--s2);border:1px solid #1f2840;border-radius:8px;color:var(--text);font-size:13px;padding:10px 12px;margin-bottom:12px;transition:.15s}
+.auth-inp:focus{border-color:var(--gold)}
+.auth-role-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.auth-role{padding:10px;border:var(--bd);border-radius:8px;cursor:pointer;text-align:center;transition:.15s;background:var(--s2)}
+.auth-role.on{border-color:var(--gold);background:rgba(240,168,48,.08)}
+.auth-role-icon{font-size:20px;margin-bottom:4px}
+.auth-role-name{font-size:11px;font-weight:600}
+.auth-role-desc{font-size:9px;color:var(--muted)}
+.btn-auth{width:100%;padding:12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,var(--gold),#c97a10);color:#000;transition:.15s;margin-top:4px}
+.btn-auth:hover{opacity:.85}
+.auth-sep{text-align:center;font-size:11px;color:var(--muted);margin:16px 0;position:relative}
+.auth-sep::before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:#1f2840}
+.auth-sep span{background:var(--s1);padding:0 10px;position:relative}
+.demo-users{display:flex;flex-direction:column;gap:6px}
+.demo-user{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--s2);border:var(--bd);border-radius:8px;cursor:pointer;transition:.15s}
+.demo-user:hover{border-color:var(--gold);background:rgba(240,168,48,.05)}
+.demo-ava{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.demo-info{flex:1}
+.demo-name{font-size:11px;font-weight:600}
+.demo-role{font-size:10px;color:var(--muted)}
+.demo-arrow{font-size:12px;color:var(--muted)}
+
+/* ── TOPBAR ── */
+.bar{height:60px;background:var(--s1);border-bottom:var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:400}
+.logos{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo-img{height:34px;object-fit:contain;border-radius:3px}
+.logo-wrap{position:relative;display:flex;align-items:center}
+.logo-wrap:hover .logo-del{opacity:1;pointer-events:all}
+.logo-del{position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e5322d;border:none;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.15s;z-index:10;line-height:1}
+.vsep{width:1px;height:28px;background:#1f2840}
+.logo-add{width:30px;height:30px;border-radius:7px;background:var(--s3);border:1px dashed #2a3450;color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.logo-add:hover{border-color:var(--gold);color:var(--gold)}
+.bar-r{display:flex;align-items:center;gap:8px}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--teal);background:rgba(15,204,160,.1);border:1px solid rgba(15,204,160,.22);border-radius:20px;padding:3px 10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s infinite}
+.dchip{font-size:11px;color:var(--muted);background:var(--s2);border:var(--bd);border-radius:7px;padding:5px 10px}
+.uchip{display:flex;align-items:center;gap:8px;background:var(--s2);border:var(--bd);border-radius:20px;padding:4px 12px 4px 4px;cursor:pointer;transition:.15s;position:relative}
+.uchip:hover{border-color:#2a3450}
+.ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.user-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--s1);border:var(--bd);border-radius:12px;padding:8px;min-width:200px;z-index:500;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.uchip:hover .user-menu,.uchip.open .user-menu{display:block}
+.user-menu-header{padding:10px 12px;border-bottom:var(--bd);margin-bottom:6px}
+.user-menu-name{font-size:13px;font-weight:700}
+.user-menu-role{font-size:10px;color:var(--muted)}
+.user-menu-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:.15s}
+.user-menu-item:hover{background:var(--s2);color:var(--text)}
+.user-menu-item.red:hover{background:rgba(229,50,45,.1);color:#f87171}
+
+/* ── COLLAB BADGE ── */
+.collab-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;background:var(--s2);border:var(--bd);border-radius:20px;padding:3px 10px;cursor:pointer;transition:.15s}
+.collab-badge:hover{border-color:#2a3450}
+.collab-avs{display:flex;margin-right:2px}
+.collab-av{width:20px;height:20px;border-radius:50%;border:2px solid var(--s1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;margin-left:-6px}
+.collab-av:first-child{margin-left:0}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+.side{width:215px;background:var(--s1);border-right:var(--bd);flex-shrink:0;padding:14px 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;display:flex;flex-direction:column}
+.slbl{font-size:10px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;padding:12px 16px 5px}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-left:2px solid transparent;transition:.15s}
+.ni:hover{color:var(--text);background:rgba(255,255,255,.02)}
+.ni.on{color:var(--text);border-left-color:var(--red);background:rgba(229,50,45,.06)}
+.cc{display:flex;align-items:center;gap:7px;padding:7px 10px;margin:0 8px 2px;border-radius:8px;cursor:pointer;transition:.15s}
+.cc:hover{background:var(--s2)}
+.cc.on{background:rgba(229,50,45,.08);outline:1px solid rgba(229,50,45,.22)}
+.cc-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:125px}
+.cc-sub{font-size:10px;color:var(--muted)}
+.btn-nc{width:calc(100% - 20px);margin:6px 10px 0;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;background:rgba(240,168,48,.07);border:1px dashed rgba(240,168,48,.3);color:var(--gold);font-size:11px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-nc:hover{background:rgba(240,168,48,.14)}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:22px 26px;overflow-x:hidden;min-width:0}
+.view{display:none}.view.on{display:block}
+.ptitle{font-family:"Plus Jakarta Sans",sans-serif;font-size:20px;font-weight:800;margin-bottom:2px}
+.psub{font-size:11px;color:var(--muted);margin-bottom:20px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:"DM Sans",sans-serif;transition:opacity .15s}
+.btn:hover{opacity:.8}
+.btn-ghost{background:transparent;border:1px solid #1f2840;color:var(--muted)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#c97a10);color:#000}
+.btn-red{background:rgba(229,50,45,.15);color:#f87171;border:1px solid rgba(229,50,45,.2)}
+.btn-teal{background:rgba(15,204,160,.12);color:var(--teal);border:1px solid rgba(15,204,160,.2)}
+.btn-ai{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff}
+.btn-blue{background:rgba(26,127,232,.12);color:#60b4f0;border:1px solid rgba(26,127,232,.2)}
+.btn-green{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2)}
+
+/* ── CARDS ── */
+.card{background:var(--s1);border:var(--bd);border-radius:12px;padding:18px;margin-bottom:14px}
+.card-t{font-size:12px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:7px}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.gauto{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+
+/* ══════════════ RESPONSIVE MOBILE ══════════════ */
+@media(max-width:768px){
+  /* Topbar */
+  .bar{padding:0 12px;height:56px}
+  .logo-img{height:26px}
+  .dchip{display:none}
+  .live{display:none}
+  .collab-badge{padding:3px 7px;font-size:10px}
+  .collab-avs{display:none}
+  .bar-r{gap:5px}
+  #topRole{display:none}
+
+  /* Layout - stack sidebar */
+  .layout{flex-direction:column}
+  .side{width:100%;height:auto;position:relative;top:0;flex-direction:row;flex-wrap:wrap;padding:8px 12px;gap:0;border-right:none;border-bottom:var(--bd);overflow-x:auto;overflow-y:hidden}
+  .slbl{display:none}
+  .side>div:not(#sideList):not(.btn-nc):not([style*="flex:1"]){display:none}
+  #sideList{display:flex;flex-direction:row;gap:4px;overflow-x:auto;padding-bottom:2px;flex:1}
+  .cc{margin:0;padding:5px 10px;white-space:nowrap;border-radius:20px;flex-shrink:0}
+  .cc-sub{display:none}
+  .btn-nc{width:auto;margin:0;white-space:nowrap;flex-shrink:0;border-radius:20px}
+  .side>div[style*="flex:1"]{display:none}
+  .side>div[style*="padding:10px 12px"]{display:none}
+
+  /* Content */
+  .content{padding:14px 12px}
+  .ptitle{font-size:16px}
+
+  /* Tables */
+  .lgrid{grid-template-columns:1fr 80px 28px;gap:4px}
+  .lgrid .lh:nth-child(2),.lgrid .lh:nth-child(4){display:none}
+  .lrow .fi:nth-child(2),.lrow .lt{display:none}
+  .lh:nth-child(3){display:none}
+  .lrow .fi-num{display:none}
+
+  /* Tabs scroll */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:8px 10px;font-size:10px}
+
+  /* KPIs */
+  .gauto{grid-template-columns:1fr 1fr}
+  .kv{font-size:15px}
+
+  /* Tbar */
+  .tbar{gap:8px;justify-content:flex-start;overflow-x:auto}
+  .ti{min-width:70px}
+  .tv{font-size:14px}
+
+  /* Fcard grid */
+  #fol-grid{grid-template-columns:1fr 1fr!important}
+
+  /* Post grid */
+  #post-grid{grid-template-columns:1fr!important}
+
+  /* Overview table - scroll */
+  .tw{overflow-x:auto}
+  table{min-width:520px}
+
+  /* Funnel - scroll */
+  .fun-row{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+  .fun-box{min-width:80px;flex-shrink:0}
+
+  /* Modals */
+  .modal{padding:16px;border-radius:12px}
+  .mt{font-size:15px}
+
+  /* Auth */
+  .auth-wrap{width:95%}
+  .auth-card{padding:18px}
+  .auth-role-row{grid-template-columns:1fr 1fr}
+
+  /* Share/collab modals */
+  .collab-user{flex-wrap:wrap;gap:6px}
+
+  /* Process grid */
+  #pf-emp,#pf-cli{padding:0}
+
+  /* Campaign header buttons */
+  #v-camp>div:first-child>div:last-child{flex-wrap:wrap;gap:4px}
+  #v-camp>div:first-child>div:last-child .btn{font-size:10px;padding:5px 9px}
+}
+
+@media(max-width:480px){
+  .gauto{grid-template-columns:1fr}
+  #fol-grid{grid-template-columns:1fr!important}
+  .auth-role-row{grid-template-columns:1fr 1fr}
+  .bar{padding:0 10px}
+  .content{padding:10px 10px}
+  .tbar{padding:10px 12px}
+}
+
+/* ── KPI ── */
+.k{background:var(--s1);border:var(--bd);border-top:2px solid var(--ka,var(--red));border-radius:11px;padding:13px 15px;transition:.18s;cursor:default}
+.k:hover{transform:translateY(-2px)}
+.kl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.kv{font-family:"Inter",sans-serif;font-size:18px;font-weight:800;line-height:1;margin-bottom:4px}
+.ks{font-size:10px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.bg{background:rgba(15,204,160,.13);color:var(--teal)}
+.br{background:rgba(229,50,45,.13);color:#f87171}
+.bb{background:rgba(26,127,232,.13);color:#60b4f0}
+.bo{background:rgba(240,168,48,.13);color:var(--gold)}
+.bp{background:rgba(139,92,246,.13);color:#a78bfa}
+.bm{background:rgba(90,106,138,.13);color:var(--muted)}
+
+/* ── BARS ── */
+.brow{margin-bottom:9px}
+.blbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px}
+.blbl b{color:var(--text);font-weight:600}
+.trk{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+/* ── TBAR ── */
+.tbar{background:linear-gradient(90deg,rgba(229,50,45,.05),rgba(26,127,232,.05));border:var(--bd);border-radius:11px;padding:13px 16px;margin-bottom:16px;display:flex;align-items:center;flex-wrap:wrap;gap:12px;justify-content:space-between}
+.ti{text-align:center;min-width:80px}
+.tl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.tv{font-family:"Inter",sans-serif;font-size:17px;font-weight:800;line-height:1.2}
+.tsep{width:1px;height:28px;background:#1f2840}
+
+/* ── LINES ── */
+.lcard{background:var(--s1);border:var(--bd);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.lcard-h{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:var(--bd)}
+.lgrid{display:grid;grid-template-columns:2fr 1.1fr 1fr 90px 28px;gap:8px;align-items:center;padding:8px 16px}
+.lhead{background:var(--s2)}
+.lh{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.lrow{border-top:var(--bd);transition:background .13s}
+.lrow:hover{background:rgba(255,255,255,.01)}
+.fi{background:var(--s2);border:1px solid #1f2840;border-radius:6px;color:var(--text);font-size:12px;padding:6px 8px;width:100%}
+.fi-b{font-weight:600}.fi-num{text-align:right;font-weight:700}
+.lt{font-size:12px;font-weight:700;color:var(--gold);text-align:right}
+.del{width:26px;height:26px;border-radius:5px;background:transparent;border:1px solid transparent;color:var(--muted);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.del:hover{background:rgba(229,50,45,.13);color:#f87171;border-color:rgba(229,50,45,.2)}
+.add-l{padding:9px 16px;border-top:var(--bd)}
+.btn-al{display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:7px;background:rgba(15,204,160,.06);border:1px dashed rgba(15,204,160,.28);color:var(--teal);font-size:11px;font-weight:600;cursor:pointer}
+.btn-al:hover{background:rgba(15,204,160,.13)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;border-bottom:var(--bd);margin-bottom:16px;overflow-x:auto}
+.tab{font-size:11px;font-weight:600;padding:9px 13px;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;transition:.15s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text);border-bottom-color:var(--red)}
+.tcontent{display:none}.tcontent.on{display:block}
+
+/* ── FOLLOWERS ── */
+.fcard{background:var(--s2);border:var(--bd);border-radius:10px;padding:13px}
+.fnet{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.frow{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.flbl{font-size:10px;color:var(--muted)}
+.finp{background:var(--bg);border:1px solid #1f2840;border-radius:6px;color:var(--text);font-family:"Inter",sans-serif;font-size:14px;font-weight:700;padding:5px 8px;width:95px;text-align:right}
+.fdiff{font-size:12px;font-weight:700}
+.fdiff.up{color:var(--teal)}.fdiff.dn{color:#f87171}
+
+/* ── POSTS ── */
+.pcard{background:var(--s2);border:var(--bd);border-radius:10px;padding:14px}
+.pnet{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;margin-bottom:10px}
+.ptext{width:100%;min-height:90px;background:transparent;border:none;color:var(--text);font-size:12px;line-height:1.6;resize:vertical;font-family:"DM Sans",sans-serif}
+.pmeta{font-size:10px;color:var(--muted);margin-top:5px;font-style:italic}
+
+/* ── KPI TARGET ── */
+.ktcard{background:var(--s2);border:var(--bd);border-radius:10px;padding:13px}
+.ktbar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-top:6px}
+.ktfill{height:100%;border-radius:2px;transition:width 1s}
+
+/* ── STRAT EDIT ── */
+.sedit{background:var(--s2);border:var(--bd);border-radius:10px;padding:13px;margin-bottom:9px}
+.sicon-inp{background:var(--s3);border:1px solid #1f2840;border-radius:6px;color:var(--text);font-size:18px;padding:4px;width:42px;text-align:center}
+.sname-inp{background:var(--s3);border:1px solid #1f2840;border-radius:6px;color:var(--text);font-family:"Inter",sans-serif;font-size:13px;font-weight:700;padding:5px 9px;flex:1;margin:0 7px}
+.sbody-ta{background:var(--s3);border:1px solid #1f2840;border-radius:6px;color:var(--muted);font-size:11px;padding:7px 9px;width:100%;resize:vertical;min-height:52px;line-height:1.6}
+
+@media(max-width:600px){
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;flex-wrap:nowrap}
+  .tab{white-space:nowrap;font-size:10px;padding:6px 10px;flex-shrink:0}
+  .card-t{flex-wrap:wrap;gap:6px}
+  .card-t .btn{font-size:10px;padding:5px 8px}
+  .phase{flex-wrap:wrap}
+  .phase .del{align-self:flex-start}
+  .msg-block{align-items:flex-start}
+  .sedit .del{margin-top:2px}
+  .sicon-inp{width:36px;font-size:15px}
+  .sname-inp{font-size:11px}
+}
+
+/* ── ADS CONNECT ── */
+.ads-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.ads-metric-empty{font-size:11px;color:var(--muted);text-align:center;padding:20px 0;font-style:italic}
+.ads-metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:10px}
+.ads-metric-box{background:var(--s2);border:var(--bd);border-radius:8px;padding:10px;text-align:center}
+.ads-metric-val{font-size:15px;font-weight:800;margin-bottom:2px}
+.ads-metric-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ads-camp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--s2);border:var(--bd);border-radius:7px;margin-bottom:5px;gap:8px;flex-wrap:wrap}
+.ads-camp-name{font-size:11px;font-weight:600;flex:1;min-width:120px}
+.ads-camp-stat{font-size:10px;color:var(--muted);text-align:right}
+.ads-loader{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--purple);padding:12px 0}
+.ads-error{background:rgba(229,50,45,.08);border:1px solid rgba(229,50,45,.2);border-radius:8px;padding:12px;font-size:11px;color:#f87171;margin-top:8px}
+.ads-platform-card{transition:box-shadow .2s}
+.ads-platform-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.3)}
+
+/* ── PROCESS ── */
+.pf{display:flex;flex-direction:column}
+.pfstep{display:flex;align-items:flex-start}
+.pfl{display:flex;flex-direction:column;align-items:center;width:28px;flex-shrink:0}
+.pfc{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;background:var(--s3)}
+.pfline{width:2px;flex:1;min-height:12px;background:#1f2840}
+.pfc-cont{padding:0 0 13px 10px;flex:1}
+.pfc-t{font-size:11px;font-weight:600}
+.pfc-d{font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4}
+
+/* ── STATUS ── */
+.stat-a{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(15,204,160,.13);color:var(--teal)}
+.stat-d{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(90,106,138,.13);color:var(--muted)}
+.stat-z{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(139,92,246,.13);color:#a78bfa}
+
+/* ── MODAL ── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(5px)}
+.ov.show{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:var(--bd);border-radius:16px;padding:24px;width:92%;max-width:490px;transform:translateY(16px);transition:transform .2s;max-height:90vh;overflow-y:auto}
+.ov.show .modal{transform:none}
+.mt{font-family:"Plus Jakarta Sans",sans-serif;font-size:17px;font-weight:800;margin-bottom:18px}
+.mf{margin-bottom:12px}
+.mfl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
+.mi{width:100%;background:var(--s2);border:1px solid #1f2840;border-radius:8px;color:var(--text);font-size:13px;padding:9px 11px}
+.cg{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.csw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0}
+.csw.on{border-color:#fff;transform:scale(1.2)}
+.ma{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+/* ── PHASE / MSG ── */
+.phase{display:flex;gap:8px;align-items:flex-start;padding:9px 11px;background:var(--s2);border-radius:8px;border:var(--bd);margin-bottom:7px}
+.ph-n{width:20px;height:20px;border-radius:50%;background:rgba(229,50,45,.13);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.ph-t{font-size:11px;font-weight:600;margin-bottom:3px}
+.ph-a{font-size:10px;color:var(--muted);line-height:1.4}
+.msg-block{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.msg-bar{width:3px;border-radius:2px;flex-shrink:0;min-height:44px;align-self:stretch}
+
+/* ── TABLE ── */
+.tw{background:var(--s1);border:var(--bd);border-radius:11px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--s2)}
+th{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 13px;text-align:left}
+td{padding:10px 13px;font-size:11px;border-top:var(--bd)}
+tr:hover td{background:rgba(255,255,255,.01)}
+
+/* ── FUNNEL ── */
+.fun-row{display:flex;align-items:center;gap:4px;overflow-x:auto;padding-bottom:4px}
+.fun-box{flex:1;text-align:center;padding:10px 6px;background:var(--s2);border:var(--bd);border-radius:8px;min-width:70px;transition:.15s}
+.fun-box:hover{border-color:var(--faint)}
+.fun-icon{font-size:15px}
+.fun-name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin:3px 0 2px}
+.fun-sub{font-size:9px;color:var(--muted)}
+.fun-arr{color:var(--faint);font-size:14px;flex-shrink:0}
+
+footer{text-align:center;padding:14px;font-size:10px;color:var(--faint);border-top:var(--bd);margin-top:10px}
+
+/* ── SHARE / COLLAB ── */
+.collab-user{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s2);border:var(--bd);border-radius:10px;margin-bottom:8px}
+.collab-user-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.collab-user-info{flex:1}
+.collab-user-name{font-size:12px;font-weight:600}
+.collab-user-role{font-size:10px;color:var(--muted)}
+.collab-user-perm select{background:var(--s3);border:var(--bd);border-radius:6px;color:var(--text);font-size:10px;padding:3px 6px;cursor:pointer}
+.share-link{display:flex;gap:6px;align-items:center;background:var(--s2);border:var(--bd);border-radius:8px;padding:8px 11px;margin-top:8px}
+.share-link input{flex:1;background:transparent;border:none;color:var(--teal);font-size:11px;font-family:monospace}
+.perm-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px}
+.perm-admin{background:rgba(240,168,48,.13);color:var(--gold)}
+.perm-edit{background:rgba(26,127,232,.13);color:#60b4f0}
+.perm-view{background:rgba(90,106,138,.13);color:var(--muted)}
+
+/* ── NOTIF ── */
+.notif{position:fixed;bottom:20px;right:20px;background:var(--s1);border:var(--bd);border-radius:10px;padding:12px 16px;font-size:12px;font-weight:600;z-index:9999;animation:slideDown .3s ease;display:flex;align-items:center;gap:8px;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.notif.green{border-color:rgba(15,204,160,.3);color:var(--teal)}
+.notif.red{border-color:rgba(229,50,45,.3);color:#f87171}
+.notif.blue{border-color:rgba(26,127,232,.3);color:#60b4f0}
+
+/* ── ONLINE USERS ── */
+.online-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block;margin-right:4px}
+
+/* ── HAMBURGER ── */
+.ham-btn{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;line-height:1;flex-shrink:0}
+.side-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:290}
+.side-overlay.show{display:block}
+@media(max-width:768px){
+  .ham-btn{display:flex;align-items:center;justify-content:center}
+  .side{display:none!important;width:100%!important;position:fixed!important;top:56px;left:0;right:0;z-index:300;height:auto!important;max-height:65vh;overflow-y:auto!important;flex-direction:column!important;padding:14px!important;border-bottom:var(--bd)}
+  .side.open{display:flex!important}
+  #sideList{flex-direction:column!important;overflow-x:visible!important;gap:0!important;overflow:visible!important}
+  .cc{margin:0 0 2px 0!important;border-radius:8px!important;padding:8px 12px!important;white-space:normal!important}
+  .cc-sub{display:block!important}
+  .btn-nc{width:100%!important;margin:6px 0 0 0!important;border-radius:8px!important}
+  .side>div[style*="padding:10px 12px"]{display:flex!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ AUTH SCREEN ═══════════════════ -->
+<div id="authScreen">
+<div class="auth-wrap">
+  <div class="auth-logo">
+        <div class="auth-logo-row" id="authLogoRow">
+      <!-- Logos dynamiques -->
+    </div>
+    </div>
+    <div class="auth-title">Dashboard Marketing Pro</div>
+    <div class="auth-sub" id="authSubtitle">Dashboard Marketing Pro · Plateforme collaborative</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab on" onclick="authTab(this,'login')" id="tab-login">Se connecter</button>
+      <button class="auth-tab" onclick="authTab(this,'register')" id="tab-register">Créer un compte</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="auth-login">
+      <label class="auth-fl">Email</label>
+      <input class="auth-inp" id="login-email" type="email" placeholder="vous@entreprise.com" value="admin@agitech.sn"/>
+      <label class="auth-fl">Mot de passe</label>
+      <input class="auth-inp" id="login-pass" type="password" placeholder="••••••••" value="admin123"/>
+      <div id="login-err" style="font-size:11px;color:#f87171;margin-bottom:8px;display:none"></div>
+      <button class="btn-auth" onclick="doLogin()">→ Se connecter</button>
+      <div class="auth-sep"><span>Connexion rapide (démo)</span></div>
+      <div class="demo-users" id="demo-users-list"></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="auth-register" style="display:none">
+      <label class="auth-fl">Nom complet</label>
+      <input class="auth-inp" id="reg-name" type="text" placeholder="Prénom Nom"/>
+      <label class="auth-fl">Email professionnel</label>
+      <input class="auth-inp" id="reg-email" type="email" placeholder="vous@entreprise.com"/>
+      <label class="auth-fl">Mot de passe</label>
+      <input class="auth-inp" id="reg-pass" type="password" placeholder="8 caractères minimum"/>
+      <label class="auth-fl" style="margin-bottom:8px">Votre rôle</label>
+      <div class="auth-role-row" id="reg-roles">
+        <div class="auth-role on" data-role="manager" onclick="pickRole(this)">
+          <div class="auth-role-icon">📊</div>
+          <div class="auth-role-name">Marketing Manager</div>
+          <div class="auth-role-desc">Accès complet</div>
+        </div>
+        <div class="auth-role" data-role="designer" onclick="pickRole(this)">
+          <div class="auth-role-icon">🎨</div>
+          <div class="auth-role-name">Designer / Créatif</div>
+          <div class="auth-role-desc">Contenus & visuels</div>
+        </div>
+        <div class="auth-role" data-role="commercial" onclick="pickRole(this)">
+          <div class="auth-role-icon">💼</div>
+          <div class="auth-role-name">Commercial</div>
+          <div class="auth-role-desc">Suivi campagnes</div>
+        </div>
+        <div class="auth-role" data-role="direction" onclick="pickRole(this)">
+          <div class="auth-role-icon">👔</div>
+          <div class="auth-role-name">Direction</div>
+          <div class="auth-role-desc">Vue synthèse</div>
+        </div>
+      </div>
+      <div id="reg-err" style="font-size:11px;color:#f87171;margin-bottom:8px;display:none"></div>
+      <button class="btn-auth" onclick="doRegister()">✓ Créer mon compte</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ APP ═══════════════════ -->
+<div id="appWrapper" style="display:none">
+
+<!-- ═══════════════════ TOPBAR ═══════════════════ -->
+<div class="bar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="ham-btn" onclick="toggleSidebar()" id="hamBtn" title="Menu">☰</button>
+  <div class="logos" id="logosRow">
+    <!-- logos rendus dynamiquement par renderLogos() -->
+    <button class="logo-add" onclick="openBrandSettings()" title="Gérer logos et noms d'entreprises">🏢</button>
+  </div>
+  </div><!-- /logos-wrapper -->
+  <div class="bar-r">
+    <div class="live"><div class="live-dot"></div>LIVE</div>
+    <div class="dchip" id="dateLbl"></div>
+    <div class="collab-badge" onclick="openModal('mShare')" id="collabBadge" title="Collaborateurs en ligne">
+      <div class="collab-avs" id="collabAvs"></div>
+      <span id="collabCount">0 en ligne</span>
+      🔗
+    </div>
+    <div class="uchip" id="userChip">
+      <div class="ava" id="topAva">?</div>
+      <div><div style="font-size:12px;font-weight:600" id="topName">—</div><div style="font-size:10px;color:var(--muted)" id="topRole">—</div></div>
+      <div class="user-menu" id="userMenu">
+        <div class="user-menu-header">
+          <div class="user-menu-name" id="um-name">—</div>
+          <div class="user-menu-role" id="um-role">—</div>
+        </div>
+        <div class="user-menu-item" onclick="openModal('mProfile')">⚙️ Mon profil</div>
+        <div class="user-menu-item" onclick="openBrandSettings()">🏢 Logos & Entreprises</div>
+        <div class="user-menu-item" onclick="openModal('mShare')">🔗 Partager un projet</div>
+        <div class="user-menu-item" onclick="openModal('mTeam')">👥 Gérer l'équipe</div>
+        <div style="border-top:var(--bd);margin:6px 0"></div>
+        <div class="user-menu-item red" onclick="doLogout()">↩ Se déconnecter</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="side-overlay" id="sideOverlay" onclick="closeSidebar()"></div>
+
+<!-- ═══════════════════ LAYOUT ═══════════════════ -->
+<div class="layout">
+<aside class="side">
+  <div class="slbl">Navigation</div>
+  <div class="ni on" data-v="overview" onclick="gv('overview',this)">📊 Vue Générale</div>
+  <div class="ni" data-v="processus" onclick="gv('processus',this)">📋 Processus</div>
+  <div class="ni" data-v="adsconnect" onclick="gv('adsconnect',this)">🔌 Ads Connect</div>
+  <div class="slbl" style="margin-top:6px">Campagnes</div>
+  <div id="sideList"></div>
+  <button class="btn-nc" onclick="openModal('mCamp')">＋ Nouvelle campagne</button>
+  <div style="flex:1"></div>
+  <div style="padding:10px 12px;border-top:var(--bd)">
+    <div style="font-size:10px;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.07em">Équipe</div>
+    <div id="sideTeam"></div>
+  </div>
+</aside>
+
+<div class="content">
+
+<!-- VUE GÉNÉRALE -->
+<div class="view on fade" id="v-overview">
+  <div class="ptitle">Dashboard Marketing Pro</div>
+  <div class="psub" id="ovSubtitle">Dashboard Marketing Pro · Logos · KPIs · Contenu IA · Réseaux Sociaux</div>
+  <div class="tbar">
+    <div class="ti"><div class="tl">Budget Total</div><div class="tv" id="ov-tot" style="color:var(--gold)">0 FCFA</div></div>
+    <div class="tsep"></div>
+    <div class="ti"><div class="tl">Campagnes</div><div class="tv" id="ov-nc" style="color:var(--teal)">0</div></div>
+    <div class="tsep"></div>
+    <div class="ti"><div class="tl">Postes</div><div class="tv" id="ov-nl" style="color:var(--blue)">0</div></div>
+    <div class="tsep"></div>
+    <div class="ti"><div class="tl">Commission</div><div class="tv" style="color:var(--red)">7%</div></div>
+    <div class="tsep"></div>
+    <div class="ti"><div class="tl">Remise Staff</div><div class="tv" style="color:var(--teal)">10%</div></div>
+  </div>
+  <div class="gauto" style="margin-bottom:14px" id="ov-kpis"></div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card"><div class="card-t">📊 Par catégorie</div><div id="ov-cats"></div></div>
+    <div class="card"><div class="card-t">🏁 Par campagne</div><div id="ov-camps-bar"></div></div>
+  </div>
+  <div class="tw" id="ov-table"></div>
+</div>
+
+<!-- PROCESSUS -->
+<div class="view" id="v-processus">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
+    <div>
+      <div class="ptitle">📋 Processus de Financement</div>
+      <div class="psub" id="procSubtitle" style="margin-bottom:0">Processus globaux — applicables à toutes les campagnes</div>
+    </div>
+    <button class="btn btn-gold" onclick="openModal('mAddGlobalProcess')">＋ Nouveau processus global</button>
+  </div>
+  <div id="global-proc-grid" style="margin-top:16px"></div>
+</div>
+
+<!-- CAMPAGNE DÉTAIL -->
+<div class="view" id="v-camp">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:3px">
+        <div class="ptitle" id="cd-name" style="margin-bottom:0">—</div>
+        <span id="cd-stat"></span>
+      </div>
+      <div class="psub" id="cd-sub" style="margin-bottom:0">—</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="gv('overview',document.querySelector('[data-v=overview]'))">← Retour</button>
+      <button class="btn btn-green" onclick="openShareCamp()">🔗 Partager</button>
+      <select id="cd-sel" class="fi" style="width:115px;font-size:11px" onchange="updStat()">
+        <option value="active">🟢 Actif</option>
+        <option value="draft">⚪ Brouillon</option>
+        <option value="done">🟣 Terminé</option>
+      </select>
+      <button class="btn btn-red" onclick="delCamp()">🗑 Supprimer</button>
+    </div>
+  </div>
+  <div class="tabs" id="campTabs">
+    <button class="tab on" onclick="showTab('tb',this)">💰 Budget</button>
+    <button class="tab" onclick="showTab('tk',this)">🎯 Objectifs & KPIs</button>
+    <button class="tab" onclick="showTab('ts',this)">📲 Réseaux Sociaux</button>
+    <button class="tab" onclick="showTab('tst',this)">📡 Stratégie</button>
+    <button class="tab" onclick="showTab('tc',this)">📣 Plan de Com</button>
+    <button class="tab" onclick="showTab('tproc',this)">📋 Processus</button>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="tcontent on" id="tb">
+    <div class="tbar" id="cd-totbar"></div>
+    <div class="lcard">
+      <div class="lcard-h"><span style="font-size:12px;font-weight:700">💰 Postes Budgétaires</span><button class="btn btn-gold" onclick="applyL()">✓ Recalculer</button></div>
+      <div class="lgrid lhead"><span class="lh">Poste</span><span class="lh">Catégorie</span><span class="lh">Montant FCFA</span><span class="lh">Total</span><span></span></div>
+      <div id="lbody"></div>
+      <div class="add-l"><button class="btn-al" onclick="addL()">＋ Ajouter un poste</button></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="card-t">📊 Répartition</div><div id="cd-bars"></div></div>
+      <div class="card"><div class="card-t">📋 Récapitulatif</div><div id="cd-recap"></div></div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="tcontent" id="tk">
+    <div class="card">
+      <div class="card-t" style="justify-content:space-between">🎯 Objectifs à atteindre <button class="btn btn-teal" onclick="autoKpi()">↺ Estimation auto</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px" id="kpi-targets"></div>
+    </div>
+    <div class="g2" style="margin-top:14px">
+      <div class="card"><div class="card-t">📈 Progression</div><div id="kpi-prog"></div></div>
+      <div class="card"><div class="card-t">🔗 Liens Tracking</div><div id="kpi-track"></div></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-t" style="justify-content:space-between">🔮 Projection des Résultats <span class="badge bp">Estimation</span></div>
+      <div id="kpi-proj"></div>
+    </div>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="tcontent" id="ts">
+    <div class="card">
+      <div class="card-t" style="justify-content:space-between">👥 Suivi des Abonnés <button class="btn btn-teal" onclick="addNet()">＋ Réseau</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:10px" id="fol-grid"></div>
+    </div>
+    <div class="card" style="margin-top:0">
+      <div class="card-t" style="justify-content:space-between">
+        ✍️ Générateur de Contenus IA
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px;color:var(--muted)">Posts:</span>
+          <input id="nb-posts" type="number" value="3" min="1" max="8" class="fi" style="width:50px;text-align:center;font-size:12px;padding:4px 6px"/>
+          <button class="btn btn-ai" onclick="genPosts()">✨ Générer via IA</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Campagne: <strong id="ctx-camp" style="color:var(--text)">—</strong></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px" id="post-grid"></div>
+      <div id="ai-out"></div>
+    </div>
+  </div>
+
+  <!-- STRATÉGIE -->
+  <div class="tcontent" id="tst">
+    <div class="card">
+      <div class="card-t" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>📡 Stratégie Digitale</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ai" onclick="aiOptimizeStrat()">✨ Optimiser via IA</button>
+          <button class="btn btn-teal" onclick="addStrat()">＋ Ajouter</button>
+        </div>
+      </div>
+      <div id="strat-ai-out"></div>
+      <div id="strat-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-t">🔀 Funnel Digital</div>
+      <div class="fun-row">
+        <div class="fun-box"><div class="fun-icon">👁️</div><div class="fun-name" style="color:var(--red)">Attention</div><div class="fun-sub">Meta/LinkedIn</div></div>
+        <div class="fun-arr">→</div>
+        <div class="fun-box"><div class="fun-icon">💡</div><div class="fun-name" style="color:var(--orange)">Intérêt</div><div class="fun-sub">Contenu</div></div>
+        <div class="fun-arr">→</div>
+        <div class="fun-box"><div class="fun-icon">🎯</div><div class="fun-name" style="color:var(--gold)">Intention</div><div class="fun-sub">WhatsApp</div></div>
+        <div class="fun-arr">→</div>
+        <div class="fun-box"><div class="fun-icon">💳</div><div class="fun-name" style="color:var(--teal)">Achat</div><div class="fun-sub">Conversion</div></div>
+        <div class="fun-arr">→</div>
+        <div class="fun-box"><div class="fun-icon">🔄</div><div class="fun-name" style="color:var(--blue)">Fidélité</div><div class="fun-sub">CRM</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN DE COM -->
+  <div class="tcontent" id="tc">
+    <div class="card">
+      <div class="card-t" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>📣 Phases de Communication</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ai" onclick="aiGenPlan()">✨ Générer via IA</button>
+          <button class="btn btn-teal" onclick="addPhase()">＋ Phase</button>
+        </div>
+      </div>
+      <div id="plan-ai-out"></div>
+      <div id="phases-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-t" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>💬 Messages Clés</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ai" onclick="aiGenMsgs()">✨ Messages IA</button>
+          <button class="btn btn-teal" onclick="addMsg()">＋ Message</button>
+        </div>
+      </div>
+      <div id="msgs-ai-out"></div>
+      <div id="msgs-list"></div>
+    </div>
+  </div>
+
+  <!-- PROCESSUS CAMPAGNE -->
+  <div class="tcontent" id="tproc">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-size:13px;font-weight:700">📋 Processus spécifiques à cette campagne</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Définissez des flux de travail personnalisés pour cette campagne</div>
+      </div>
+      <button class="btn btn-gold" onclick="addCampProcess()">＋ Nouveau processus</button>
+    </div>
+    <div id="camp-proc-list"></div>
+    <div style="margin-top:14px;padding:12px;background:rgba(26,127,232,.04);border:1px dashed rgba(26,127,232,.2);border-radius:10px;font-size:11px;color:var(--muted)">
+      💡 <strong style="color:var(--text)">Tip :</strong> Les processus globaux (Employé COFINA, Client COFINA) restent disponibles dans le menu <em>Processus</em> de la sidebar. Ici, créez des processus spécifiques à cette campagne.
+    </div>
+  </div>
+</div><!-- /v-camp -->
+
+<!-- ═══════════ ADS CONNECT VIEW ═══════════ -->
+<div class="view" id="v-adsconnect">
+  <div class="ptitle">🔌 Ads Connect</div>
+  <div class="psub">Connectez vos comptes publicitaires pour importer les données réelles</div>
+
+  <!-- Backend URL Config -->
+  <div class="card" style="border-top:2px solid var(--purple);margin-bottom:14px">
+    <div class="card-t">⚙️ Configuration Backend</div>
+    <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <label class="mfl" style="display:block;margin-bottom:5px">URL de votre serveur backend</label>
+        <input class="mi" id="ads-backend-url" placeholder="http://localhost:3001 ou https://votre-app.railway.app" style="width:100%"/>
+      </div>
+      <button class="btn btn-ai" onclick="testBackend()" style="flex-shrink:0">🔍 Tester la connexion</button>
+    </div>
+    <div id="backend-status" style="margin-top:10px"></div>
+  </div>
+
+  <!-- Date Range -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-t">📅 Période d'analyse</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <div>
+        <label class="mfl" style="display:block;margin-bottom:4px">Du</label>
+        <input type="date" class="mi" id="ads-date-from" style="width:160px"/>
+      </div>
+      <div>
+        <label class="mfl" style="display:block;margin-bottom:4px">Au</label>
+        <input type="date" class="mi" id="ads-date-to" style="width:160px"/>
+      </div>
+      <button class="btn btn-gold" onclick="fetchAllAds()" style="margin-top:18px">📥 Importer toutes les données</button>
+    </div>
+  </div>
+
+  <!-- 4 Platform Cards -->
+  <div class="g2" style="margin-bottom:14px">
+
+    <!-- META -->
+    <div class="card ads-platform-card" id="card-meta" style="border-top:2px solid #1877f2">
+      <div class="card-t" style="justify-content:space-between">
+        <span>📘 Meta Ads <span style="font-size:10px;color:var(--muted)">(Facebook & Instagram)</span></span>
+        <div style="display:flex;gap:5px;align-items:center">
+          <div class="ads-status-dot" id="dot-meta" style="background:var(--faint)"></div>
+          <button class="btn" style="background:#1877f2;color:#fff;font-size:10px;padding:4px 10px" onclick="fetchAds('meta')">Importer</button>
+        </div>
+      </div>
+      <div class="ads-metrics-grid" id="metrics-meta">
+        <div class="ads-metric-empty">Données non chargées — cliquez Importer</div>
+      </div>
+      <div id="ads-table-meta"></div>
+    </div>
+
+    <!-- GOOGLE -->
+    <div class="card ads-platform-card" id="card-google" style="border-top:2px solid #34a853">
+      <div class="card-t" style="justify-content:space-between">
+        <span>🔵 Google Ads</span>
+        <div style="display:flex;gap:5px;align-items:center">
+          <div class="ads-status-dot" id="dot-google" style="background:var(--faint)"></div>
+          <button class="btn" style="background:#34a853;color:#fff;font-size:10px;padding:4px 10px" onclick="fetchAds('google')">Importer</button>
+        </div>
+      </div>
+      <div class="ads-metrics-grid" id="metrics-google">
+        <div class="ads-metric-empty">Données non chargées — cliquez Importer</div>
+      </div>
+      <div id="ads-table-google"></div>
+    </div>
+
+    <!-- LINKEDIN -->
+    <div class="card ads-platform-card" id="card-linkedin" style="border-top:2px solid #0a66c2">
+      <div class="card-t" style="justify-content:space-between">
+        <span>💼 LinkedIn Ads</span>
+        <div style="display:flex;gap:5px;align-items:center">
+          <div class="ads-status-dot" id="dot-linkedin" style="background:var(--faint)"></div>
+          <button class="btn" style="background:#0a66c2;color:#fff;font-size:10px;padding:4px 10px" onclick="fetchAds('linkedin')">Importer</button>
+        </div>
+      </div>
+      <div class="ads-metrics-grid" id="metrics-linkedin">
+        <div class="ads-metric-empty">Données non chargées — cliquez Importer</div>
+      </div>
+      <div id="ads-table-linkedin"></div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="card ads-platform-card" id="card-tiktok" style="border-top:2px solid #69C9D0">
+      <div class="card-t" style="justify-content:space-between">
+        <span>🎵 TikTok Ads</span>
+        <div style="display:flex;gap:5px;align-items:center">
+          <div class="ads-status-dot" id="dot-tiktok" style="background:var(--faint)"></div>
+          <button class="btn" style="background:#333;color:#69C9D0;border:1px solid #69C9D0;font-size:10px;padding:4px 10px" onclick="fetchAds('tiktok')">Importer</button>
+        </div>
+      </div>
+      <div class="ads-metrics-grid" id="metrics-tiktok">
+        <div class="ads-metric-empty">Données non chargées — cliquez Importer</div>
+      </div>
+      <div id="ads-table-tiktok"></div>
+    </div>
+
+  </div><!-- /g2 -->
+
+  <!-- Résumé agrégé toutes plateformes -->
+  <div class="card" id="ads-global-summary" style="display:none;border-top:2px solid var(--gold)">
+    <div class="card-t">🌍 Résumé global — Toutes plateformes</div>
+    <div class="gauto" id="ads-global-kpis"></div>
+    <div style="margin-top:14px" id="ads-global-table"></div>
+  </div>
+
+  <!-- Guide de démarrage -->
+  <div class="card" style="background:rgba(139,92,246,.05);border-color:rgba(139,92,246,.2)">
+    <div class="card-t">📖 Guide de démarrage rapide</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px">① Déployer le backend</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7">
+          1. Aller sur <a href="https://railway.app" target="_blank" style="color:var(--blue)">railway.app</a><br>
+          2. New Project → Deploy from GitHub<br>
+          3. Uploader le dossier <code style="background:var(--s3);padding:1px 5px;border-radius:3px">ads-backend</code><br>
+          4. Copier l'URL générée ici
+        </div>
+      </div>
+      <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px">
+        <div style="font-size:11px;font-weight:700;color:#1877f2;margin-bottom:8px">② Meta Business</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7">
+          1. <a href="https://developers.facebook.com" target="_blank" style="color:var(--blue)">developers.facebook.com</a><br>
+          2. Créer App → Business<br>
+          3. Ajouter Marketing API<br>
+          4. System User Token → .env
+        </div>
+      </div>
+      <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px">
+        <div style="font-size:11px;font-weight:700;color:#34a853;margin-bottom:8px">③ Google Ads API</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7">
+          1. <a href="https://console.cloud.google.com" target="_blank" style="color:var(--blue)">console.cloud.google.com</a><br>
+          2. Activer Google Ads API<br>
+          3. OAuth Playground → Refresh Token<br>
+          4. Developer Token → Centre API
+        </div>
+      </div>
+      <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px">
+        <div style="font-size:11px;font-weight:700;color:#0a66c2;margin-bottom:8px">④ LinkedIn + TikTok</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7">
+          LinkedIn: <a href="https://linkedin.com/developers" target="_blank" style="color:var(--blue)">linkedin.com/developers</a><br>
+          → r_ads + r_ads_reporting<br><br>
+          TikTok: <a href="https://business.tiktok.com" target="_blank" style="color:var(--blue)">business.tiktok.com/portal/apps</a><br>
+          → ad.read + report.read
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /v-adsconnect -->
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<footer>
+  <span id="footerText">Dashboard Marketing Pro · Toutes données confidentielles · 2026</span>
+  <div style="margin-top:6px;font-size:11px;color:#3a4a6a">
+    Créé par <strong style="color:#f0a830;letter-spacing:.03em">Mouhamed Kandji</strong> · <span style="color:#5a6a8a;font-style:italic">Chercheur Marketing</span>
+  </div>
+</footer>
+
+<!-- ═══ MODAL NOUVEAU PROCESSUS GLOBAL ═══ -->
+<div class="ov" id="mAddGlobalProcess" onclick="closeOv('mAddGlobalProcess',event)">
+<div class="modal" style="max-width:540px">
+  <div class="mt">📋 Nouveau Processus Global</div>
+  <div class="mf"><label class="mfl">Titre du processus</label><input class="mi" id="gp-title" placeholder="Ex: Partenaire B2B, Client PME..."/></div>
+  <div class="mf"><label class="mfl">Icône</label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="gp-icon-pick">
+      <span class="gp-icon-opt" data-icon="👔" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s3)">👔</span>
+      <span class="gp-icon-opt" data-icon="👤" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">👤</span>
+      <span class="gp-icon-opt" data-icon="🏪" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🏪</span>
+      <span class="gp-icon-opt" data-icon="🌐" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🌐</span>
+      <span class="gp-icon-opt" data-icon="🤝" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🤝</span>
+      <span class="gp-icon-opt" data-icon="📦" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">📦</span>
+      <span class="gp-icon-opt" data-icon="🏢" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🏢</span>
+      <span class="gp-icon-opt" data-icon="💼" onclick="pickGPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">💼</span>
+    </div>
+  </div>
+  <div class="mf"><label class="mfl">Couleur accent</label>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <div class="gp-col-opt csw on" style="background:#e5322d" data-col="#e5322d" onclick="pickGPColor(this)"></div>
+      <div class="gp-col-opt csw" style="background:#1a7fe8" data-col="#1a7fe8" onclick="pickGPColor(this)"></div>
+      <div class="gp-col-opt csw" style="background:#0fcca0" data-col="#0fcca0" onclick="pickGPColor(this)"></div>
+      <div class="gp-col-opt csw" style="background:#f0a830" data-col="#f0a830" onclick="pickGPColor(this)"></div>
+      <div class="gp-col-opt csw" style="background:#8b5cf6" data-col="#8b5cf6" onclick="pickGPColor(this)"></div>
+    </div>
+  </div>
+  <div class="mf">
+    <label class="mfl">Étapes (une par ligne : Titre | Description)</label>
+    <textarea class="mi" id="gp-steps" rows="7" placeholder="Création Compte | L'agent crée le compte client&#10;Validation | Le client valide la proforma&#10;Envoi Documents | Proformas envoyées au RCH&#10;Validation COFINA | Bon de commande par e-mail&#10;Livraison | CCBM livre · COFINA paie (-7%)" style="font-size:11px;line-height:1.7;resize:vertical"></textarea>
+  </div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mAddGlobalProcess')">Annuler</button>
+    <button class="btn btn-gold" onclick="saveGlobalProcess()">✓ Créer</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ MODAL NOUVEAU PROCESSUS CAMPAGNE ═══ -->
+<div class="ov" id="mAddCampProcess" onclick="closeOv('mAddCampProcess',event)">
+<div class="modal" style="max-width:540px">
+  <div class="mt">📋 Nouveau Processus Campagne</div>
+  <div class="mf"><label class="mfl">Titre du processus</label><input class="mi" id="cp-title" placeholder="Ex: Onboarding Client, Validation Interne..."/></div>
+  <div class="mf"><label class="mfl">Icône</label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="cp-icon-pick">
+      <span class="cp-icon-opt" data-icon="📋" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s3)">📋</span>
+      <span class="cp-icon-opt" data-icon="✅" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">✅</span>
+      <span class="cp-icon-opt" data-icon="🚀" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🚀</span>
+      <span class="cp-icon-opt" data-icon="📣" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">📣</span>
+      <span class="cp-icon-opt" data-icon="🎯" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🎯</span>
+      <span class="cp-icon-opt" data-icon="🔄" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">🔄</span>
+      <span class="cp-icon-opt" data-icon="📊" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">📊</span>
+      <span class="cp-icon-opt" data-icon="💡" onclick="pickCPIcon(this)" style="cursor:pointer;font-size:20px;padding:4px 8px;border-radius:6px;border:var(--bd);background:var(--s2)">💡</span>
+    </div>
+  </div>
+  <div class="mf"><label class="mfl">Couleur accent</label>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <div class="cp-col-opt csw on" style="background:#e5322d" data-col="#e5322d" onclick="pickCPColor(this)"></div>
+      <div class="cp-col-opt csw" style="background:#1a7fe8" data-col="#1a7fe8" onclick="pickCPColor(this)"></div>
+      <div class="cp-col-opt csw" style="background:#0fcca0" data-col="#0fcca0" onclick="pickCPColor(this)"></div>
+      <div class="cp-col-opt csw" style="background:#f0a830" data-col="#f0a830" onclick="pickCPColor(this)"></div>
+      <div class="cp-col-opt csw" style="background:#8b5cf6" data-col="#8b5cf6" onclick="pickCPColor(this)"></div>
+    </div>
+  </div>
+  <div class="mf">
+    <label class="mfl">Étapes (une par ligne : Titre | Description)</label>
+    <textarea class="mi" id="cp-steps" rows="6" placeholder="Étape 1 | Description de l'étape&#10;Étape 2 | Description de l'étape&#10;Étape 3 | Description de l'étape" style="font-size:11px;line-height:1.7;resize:vertical"></textarea>
+  </div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mAddCampProcess')">Annuler</button>
+    <button class="btn btn-gold" onclick="saveCampProcess()">✓ Créer</button>
+  </div>
+</div>
+</div>
+</div><!-- /appWrapper -->
+
+<!-- ═══ MODAL NOUVELLE CAMPAGNE ═══ -->
+<div class="ov" id="mCamp" onclick="closeOv('mCamp',event)">
+<div class="modal">
+  <div class="mt">🚀 Nouvelle Campagne</div>
+  <div class="mf"><label class="mfl">Nom</label><input class="mi" id="m-name" placeholder="Ex: Ramadan 2026, Back-to-School..."/></div>
+  <div class="mf"><label class="mfl">Type</label>
+    <select class="mi" id="m-type">
+      <option value="partenariat">🤝 Partenariat AGITECH × COFINA</option>
+      <option value="digital">📱 100% Digitale</option>
+      <option value="terrain">🏪 Terrain / PLV</option>
+      <option value="promo">🎁 Promotion / Soldes</option>
+      <option value="brand">🏆 Branding / Notoriété</option>
+      <option value="social">📲 Social Media</option>
+      <option value="autre">📦 Autre</option>
+    </select>
+  </div>
+  <div class="mf"><label class="mfl">Couleur</label>
+    <div class="cg" id="colorG">
+      <div class="csw on" style="background:#e5322d" data-c="#e5322d" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#1a7fe8" data-c="#1a7fe8" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#0fcca0" data-c="#0fcca0" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#f0a830" data-c="#f0a830" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#8b5cf6" data-c="#8b5cf6" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#f97316" data-c="#f97316" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#ec4899" data-c="#ec4899" onclick="pickC(this)"></div>
+      <div class="csw" style="background:#22c55e" data-c="#22c55e" onclick="pickC(this)"></div>
+    </div>
+  </div>
+  <div class="mf"><label class="mfl">Statut</label>
+    <select class="mi" id="m-stat"><option value="active">🟢 Actif</option><option value="draft">⚪ Brouillon</option></select>
+  </div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mCamp')">Annuler</button>
+    <button class="btn btn-gold" onclick="createCamp()">✓ Créer</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ MODAL LOGO ═══ -->
+<div class="ov" id="mBrandSettings" onclick="closeOv('mBrandSettings',event)">
+<div class="modal" style="max-width:580px">
+  <div class="mt">🏢 Paramètres de l'entreprise</div>
+
+  <!-- Noms & Titres -->
+  <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">🔤 Noms & Titres</div>
+    <div class="mf" style="margin-bottom:8px"><label class="mfl">Nom principal (Entreprise 1)</label><input class="mi" id="bs-name1" placeholder="Ex: AGITECH"/></div>
+    <div class="mf" style="margin-bottom:8px"><label class="mfl">Nom secondaire (Entreprise 2)</label><input class="mi" id="bs-name2" placeholder="Ex: COFINA  (laisser vide si une seule)"/></div>
+    <div class="mf" style="margin-bottom:8px"><label class="mfl">Titre du dashboard</label><input class="mi" id="bs-title" placeholder="Ex: Dashboard Marketing Pro"/></div>
+    <div class="mf" style="margin-bottom:0"><label class="mfl">Sous-titre / Slogan</label><input class="mi" id="bs-subtitle" placeholder="Ex: Plateforme collaborative de suivi campagnes"/></div>
+  </div>
+
+  <!-- Logos actuels -->
+  <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">🖼️ Logos actuels</div>
+    <div id="bs-logo-list" style="display:flex;flex-wrap:wrap;gap:10px;min-height:50px;align-items:center"></div>
+  </div>
+
+  <!-- Ajouter un logo -->
+  <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">➕ Ajouter un logo</div>
+    <div class="mf" style="margin-bottom:8px"><label class="mfl">Nom de l'entreprise</label><input class="mi" id="bs-l-name" placeholder="Ex: Orange, Wave, Total Sénégal..."/></div>
+    <div class="mf" style="margin-bottom:8px"><label class="mfl">URL du logo (optionnel)</label><input class="mi" id="bs-l-url" placeholder="https://logo.url/image.png"/></div>
+    <div class="mf" style="margin-bottom:0"><label class="mfl">— ou uploader une image —</label><input type="file" id="bs-l-file" accept="image/*" class="mi" style="font-size:11px;padding:6px"/></div>
+    <button class="btn btn-teal" onclick="bsAddLogo()" style="margin-top:10px;width:100%">➕ Ajouter ce logo</button>
+  </div>
+
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mBrandSettings')">Fermer</button>
+    <button class="btn btn-gold" onclick="saveBrandSettings()">✓ Enregistrer</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ MODAL PROFIL ═══ -->
+<div class="ov" id="mProfile" onclick="closeOv('mProfile',event)">
+<div class="modal">
+  <div class="mt">⚙️ Mon Profil</div>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;padding:14px;background:var(--s2);border:var(--bd);border-radius:10px">
+    <div class="ava" id="profile-ava" style="width:48px;height:48px;font-size:18px;font-weight:700"></div>
+    <div>
+      <div style="font-size:14px;font-weight:700" id="profile-name">—</div>
+      <div style="font-size:11px;color:var(--muted)" id="profile-role">—</div>
+      <div style="font-size:10px;color:var(--muted)" id="profile-email">—</div>
+    </div>
+  </div>
+  <div class="mf"><label class="mfl">Nom affiché</label><input class="mi" id="prof-name-inp" placeholder="Votre nom"/></div>
+  <div class="mf"><label class="mfl">Rôle / Titre</label>
+    <select class="mi" id="prof-role-inp">
+      <option value="Marketing Manager">📊 Marketing Manager</option>
+      <option value="Designer / Créatif">🎨 Designer / Créatif</option>
+      <option value="Commercial">💼 Commercial</option>
+      <option value="Direction">👔 Direction</option>
+      <option value="Responsable Digital">📱 Responsable Digital</option>
+    </select>
+  </div>
+  <div class="mf"><label class="mfl">Nouveau mot de passe (optionnel)</label><input class="mi" id="prof-pass-inp" type="password" placeholder="Laisser vide pour ne pas changer"/></div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mProfile')">Annuler</button>
+    <button class="btn btn-gold" onclick="saveProfile()">✓ Enregistrer</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ MODAL PARTAGE ═══ -->
+<div class="ov" id="mShare" onclick="closeOv('mShare',event)">
+<div class="modal" style="max-width:520px">
+  <div class="mt">🔗 Partager un Projet</div>
+  <div id="share-camp-info" style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--muted)">
+    Sélectionnez une campagne à partager
+  </div>
+  <div class="mf">
+    <label class="mfl">Campagne à partager</label>
+    <select class="mi" id="share-camp-sel" onchange="updateShareInfo()">
+      <option value="">— Choisir une campagne —</option>
+    </select>
+  </div>
+  <div class="mf">
+    <label class="mfl">Inviter par email</label>
+    <div style="display:flex;gap:6px">
+      <input class="mi" id="invite-email" placeholder="collaborateur@exemple.com" style="flex:1"/>
+      <select class="mi" id="invite-perm" style="width:120px">
+        <option value="edit">✏️ Peut éditer</option>
+        <option value="view">👁️ Lecture seule</option>
+        <option value="admin">👑 Admin</option>
+      </select>
+    </div>
+  </div>
+  <div class="ma" style="justify-content:flex-start;margin-top:4px;margin-bottom:16px">
+    <button class="btn btn-gold" onclick="sendInvite()">✉️ Envoyer l'invitation</button>
+  </div>
+  <div class="mf">
+    <label class="mfl">Membres avec accès</label>
+    <div id="share-members"></div>
+  </div>
+  <div class="mf">
+    <label class="mfl">Lien de partage direct</label>
+    <div class="share-link">
+      <input id="share-link-val" readonly value="https://dashboard.agitech-cofina.sn/share/camp_abc123"/>
+      <button class="btn btn-teal" onclick="copyShareLink()" style="flex-shrink:0;padding:5px 10px;font-size:10px">📋 Copier</button>
+    </div>
+  </div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mShare')">Fermer</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ MODAL ÉQUIPE ═══ -->
+<div class="ov" id="mTeam" onclick="closeOv('mTeam',event)">
+<div class="modal" style="max-width:520px">
+  <div class="mt">👥 Gestion de l'Équipe</div>
+  <div style="background:var(--s2);border:var(--bd);border-radius:10px;padding:12px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:700" id="team-count">— membres</div>
+      <div style="font-size:10px;color:var(--muted)">dans votre équipe</div>
+    </div>
+    <div style="display:flex;gap:4px" id="team-online-avs"></div>
+  </div>
+  <div id="team-list"></div>
+  <div style="margin-top:14px;padding:12px;background:rgba(240,168,48,.05);border:1px dashed rgba(240,168,48,.25);border-radius:10px">
+    <div style="font-size:11px;font-weight:600;color:var(--gold);margin-bottom:8px">＋ Ajouter un membre</div>
+    <input class="mi" id="team-invite-email" placeholder="email@domaine.com" style="margin-bottom:8px"/>
+    <div style="display:flex;gap:6px">
+      <select class="mi" id="team-invite-role" style="flex:1">
+        <option value="Marketing Manager">📊 Marketing Manager</option>
+        <option value="Designer / Créatif">🎨 Designer</option>
+        <option value="Commercial">💼 Commercial</option>
+        <option value="Direction">👔 Direction</option>
+      </select>
+      <button class="btn btn-gold" onclick="addTeamMember()">Inviter</button>
+    </div>
+  </div>
+  <div class="ma">
+    <button class="btn btn-ghost" onclick="closeOv('mTeam')">Fermer</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ANTHROPIC API — INTÉGRATION DIRECTE
+// ═══════════════════════════════════════════════════════
+async function callAnthropicAPIWithSystem(system,prompt,maxTokens){
+  const response=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "anthropic-version":"2023-06-01",
+      "anthropic-dangerous-direct-browser-access":"true",
+      "x-api-key":"INTEGRATED_API_KEY_PLACEHOLDER"
+    },
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:maxTokens||1000,
+      system:system,
+      messages:[{role:"user",content:prompt}]
+    })
+  });
+  return response;
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTH SYSTEM
+// ═══════════════════════════════════════════════════════
+const DEMO_USERS=[
+  {id:"u1",name:"Mouhamed Kandji",email:"admin@agitech.sn",pass:"admin123",role:"Marketing Manager",color:"#e5322d",perm:"admin"},
+  {id:"u2",name:"Fatou Diallo",email:"fatou@cofina.sn",pass:"cofina123",role:"Responsable Digital",color:"#1a7fe8",perm:"edit"},
+  {id:"u3",name:"Ibrahim Sow",email:"ibrahim@agitech.sn",pass:"agitech123",role:"Commercial",color:"#0fcca0",perm:"view"},
+  {id:"u4",name:"Aminata Ndiaye",email:"aminata@cofina.sn",pass:"design123",role:"Designer / Créatif",color:"#8b5cf6",perm:"edit"}
+];
+
+let USERS=[...DEMO_USERS];
+let CURRENT_USER=null;
+let SEL_ROLE="manager";
+
+function authTab(btn,tab){
+  document.querySelectorAll(".auth-tab").forEach(t=>t.classList.remove("on"));
+  btn.classList.add("on");
+  document.getElementById("auth-login").style.display=tab==="login"?"block":"none";
+  document.getElementById("auth-register").style.display=tab==="register"?"block":"none";
+}
+function pickRole(el){
+  document.querySelectorAll(".auth-role").forEach(r=>r.classList.remove("on"));
+  el.classList.add("on");
+  SEL_ROLE=el.dataset.role;
+}
+const ROLE_MAP={manager:"Marketing Manager",designer:"Designer / Créatif",commercial:"Commercial",direction:"Direction"};
+
+function doLogin(){
+  const email=document.getElementById("login-email").value.trim();
+  const pass=document.getElementById("login-pass").value;
+  const user=USERS.find(u=>u.email===email&&u.pass===pass);
+  if(!user){
+    const err=document.getElementById("login-err");
+    err.style.display="block";
+    err.textContent="Email ou mot de passe incorrect.";
+    return;
+  }
+  loginUser(user);
+}
+function doRegister(){
+  const name=document.getElementById("reg-name").value.trim();
+  const email=document.getElementById("reg-email").value.trim();
+  const pass=document.getElementById("reg-pass").value;
+  const err=document.getElementById("reg-err");
+  if(!name||!email||!pass){err.style.display="block";err.textContent="Tous les champs sont obligatoires.";return;}
+  if(USERS.find(u=>u.email===email)){err.style.display="block";err.textContent="Cet email est déjà utilisé.";return;}
+  const colors=["#e5322d","#1a7fe8","#0fcca0","#f0a830","#8b5cf6","#ec4899"];
+  const newUser={id:"u"+Date.now(),name,email,pass,role:ROLE_MAP[SEL_ROLE]||"Marketing Manager",color:colors[USERS.length%colors.length],perm:"edit"};
+  USERS.push(newUser);
+  loginUser(newUser);
+}
+function loginUser(user){
+  CURRENT_USER=user;
+  document.getElementById("authScreen").classList.add("hide");
+  document.getElementById("appWrapper").style.display="block";
+  updateUserUI();
+  renderTeamSide();
+  renderCollabBadge();
+  showNotif("✅ Bienvenue, "+user.name.split(" ")[0]+" !","green");
+}
+function doLogout(){
+  CURRENT_USER=null;
+  document.getElementById("authScreen").classList.remove("hide");
+  document.getElementById("appWrapper").style.display="none";
+}
+function updateUserUI(){
+  if(!CURRENT_USER)return;
+  const initials=CURRENT_USER.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  document.getElementById("topAva").textContent=initials;
+  document.getElementById("topAva").style.background="linear-gradient(135deg,"+CURRENT_USER.color+","+adjustColor(CURRENT_USER.color,30)+")";
+  document.getElementById("topName").textContent=CURRENT_USER.name.split(" ")[0];
+  document.getElementById("topRole").textContent=CURRENT_USER.role;
+  document.getElementById("um-name").textContent=CURRENT_USER.name;
+  document.getElementById("um-role").textContent=CURRENT_USER.role;
+  // Profile modal
+  const pava=document.getElementById("profile-ava");
+  if(pava){pava.textContent=initials;pava.style.background="linear-gradient(135deg,"+CURRENT_USER.color+","+adjustColor(CURRENT_USER.color,30)+")";}
+  set("profile-name",CURRENT_USER.name);
+  set("profile-role",CURRENT_USER.role);
+  set("profile-email",CURRENT_USER.email);
+  const ni=document.getElementById("prof-name-inp");
+  if(ni)ni.value=CURRENT_USER.name;
+  const ri=document.getElementById("prof-role-inp");
+  if(ri)ri.value=CURRENT_USER.role;
+}
+function saveProfile(){
+  if(!CURRENT_USER)return;
+  const name=document.getElementById("prof-name-inp").value.trim();
+  const role=document.getElementById("prof-role-inp").value;
+  const pass=document.getElementById("prof-pass-inp").value;
+  if(name)CURRENT_USER.name=name;
+  if(role)CURRENT_USER.role=role;
+  if(pass&&pass.length>=6)CURRENT_USER.pass=pass;
+  updateUserUI();
+  closeOv("mProfile");
+  showNotif("✅ Profil mis à jour","green");
+}
+function adjustColor(hex,amount){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return "#"+[r,g,b].map(v=>Math.min(255,v+amount).toString(16).padStart(2,"0")).join("");
+}
+function renderDemoUsers(){
+  html("demo-users-list",DEMO_USERS.map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    const permLabel={admin:"Admin",edit:"Éditeur",view:"Lecteur"}[u.perm]||"";
+    return`<div class="demo-user" onclick="quickLogin('${u.id}')">
+      <div class="demo-ava" style="background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)})">${init}</div>
+      <div class="demo-info">
+        <div class="demo-name">${esc(u.name)}</div>
+        <div class="demo-role">${esc(u.role)} · <span style="color:${u.color}">${permLabel}</span></div>
+      </div>
+      <span class="demo-arrow">→</span>
+    </div>`}).join(""));
+}
+function quickLogin(uid){
+  const user=USERS.find(u=>u.id===uid);
+  if(user)loginUser(user);
+}
+
+// ═══════════════════════════════════════════════════════
+// TEAM & COLLAB
+// ═══════════════════════════════════════════════════════
+function renderTeamSide(){
+  const online=USERS.slice(0,3);
+  html("sideTeam",online.map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    const isMe=CURRENT_USER&&u.id===CURRENT_USER.id;
+    return`<div style="display:flex;align-items:center;gap:7px;padding:4px 4px;border-radius:7px;margin-bottom:3px">
+      <div style="position:relative">
+        <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)});display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">${init}</div>
+        <div style="position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:var(--teal);border:1.5px solid var(--s1)"></div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${isMe?u.name+" (moi)":u.name}</div>
+      </div>
+    </div>`}).join(""));
+}
+function renderCollabBadge(){
+  const online=USERS.slice(0,3);
+  html("collabAvs",online.map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    return`<div class="collab-av" style="background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)})">${init}</div>`;
+  }).join(""));
+  set("collabCount",online.length+" en ligne");
+}
+function renderShareMembers(){
+  html("share-members",USERS.map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    const isMe=CURRENT_USER&&u.id===CURRENT_USER.id;
+    const permC={admin:"perm-admin",edit:"perm-edit",view:"perm-view"}[u.perm]||"perm-view";
+    const permLabel={admin:"Admin",edit:"Éditeur",view:"Lecteur"}[u.perm]||"";
+    return`<div class="collab-user">
+      <div class="collab-user-av" style="background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)})">${init}</div>
+      <div class="collab-user-info">
+        <div class="collab-user-name">${esc(u.name)}${isMe?" (moi)":""}</div>
+        <div class="collab-user-role">${esc(u.role)}</div>
+      </div>
+      <div class="collab-user-perm">
+        <span class="perm-badge ${permC}">${permLabel}</span>
+        ${!isMe&&CURRENT_USER&&CURRENT_USER.perm==="admin"?`<button class="btn btn-red" style="font-size:10px;padding:3px 8px;margin-left:6px" onclick="removeMember('${u.id}')">Retirer</button>`:""}
+      </div>
+    </div>`;
+  }).join(""));
+  set("team-count",USERS.length+" membres");
+  html("team-online-avs",USERS.slice(0,4).map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    return`<div class="collab-av" style="background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)});width:28px;height:28px;font-size:10px">${init}</div>`;
+  }).join(""));
+  html("team-list",USERS.map(u=>{
+    const init=u.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    const isMe=CURRENT_USER&&u.id===CURRENT_USER.id;
+    const permC={admin:"perm-admin",edit:"perm-edit",view:"perm-view"}[u.perm]||"perm-view";
+    const permLabel={admin:"Admin",edit:"Éditeur",view:"Lecteur"}[u.perm]||"";
+    return`<div class="collab-user">
+      <div class="collab-user-av" style="background:linear-gradient(135deg,${u.color},${adjustColor(u.color,30)})">${init}</div>
+      <div class="collab-user-info">
+        <div class="collab-user-name">${esc(u.name)}${isMe?" (moi)":""}</div>
+        <div class="collab-user-role">${esc(u.email)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        ${!isMe&&CURRENT_USER&&CURRENT_USER.perm==="admin"?`<select class="fi" style="font-size:10px;padding:3px 6px;width:100px" onchange="changePerm('${u.id}',this.value)">
+          <option value="admin" ${u.perm==="admin"?"selected":""}>👑 Admin</option>
+          <option value="edit" ${u.perm==="edit"?"selected":""}>✏️ Éditeur</option>
+          <option value="view" ${u.perm==="view"?"selected":""}>👁️ Lecteur</option>
+        </select>`:`<span class="perm-badge ${permC}">${permLabel}</span>`}
+        ${!isMe&&CURRENT_USER&&CURRENT_USER.perm==="admin"?`<button class="del" onclick="removeMember('${u.id}')">✕</button>`:""}
+      </div>
+    </div>`;
+  }).join(""));
+}
+function sendInvite(){
+  const email=document.getElementById("invite-email").value.trim();
+  const perm=document.getElementById("invite-perm").value;
+  if(!email){showNotif("⚠️ Entrez un email","red");return;}
+  if(USERS.find(u=>u.email===email)){showNotif("⚠️ Cet utilisateur est déjà membre","red");return;}
+  const colors=["#e5322d","#1a7fe8","#0fcca0","#f0a830","#8b5cf6","#ec4899"];
+  const name=email.split("@")[0].replace(/[._-]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+  USERS.push({id:"u"+Date.now(),name,email,pass:"temp123",role:"Marketing Manager",color:colors[USERS.length%colors.length],perm});
+  document.getElementById("invite-email").value="";
+  renderShareMembers();
+  renderTeamSide();
+  renderCollabBadge();
+  showNotif("✉️ Invitation envoyée à "+email,"blue");
+}
+function addTeamMember(){
+  const email=document.getElementById("team-invite-email").value.trim();
+  const role=document.getElementById("team-invite-role").value;
+  if(!email){showNotif("⚠️ Entrez un email","red");return;}
+  if(USERS.find(u=>u.email===email)){showNotif("⚠️ Déjà membre","red");return;}
+  const colors=["#e5322d","#1a7fe8","#0fcca0","#f0a830","#8b5cf6","#ec4899"];
+  const name=email.split("@")[0].replace(/[._-]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+  USERS.push({id:"u"+Date.now(),name,email,pass:"temp123",role,color:colors[USERS.length%colors.length],perm:"edit"});
+  document.getElementById("team-invite-email").value="";
+  renderShareMembers();
+  renderTeamSide();
+  renderCollabBadge();
+  showNotif("✅ Membre ajouté","green");
+}
+function removeMember(uid){
+  if(!confirm("Retirer ce membre ?"))return;
+  USERS=USERS.filter(u=>u.id!==uid);
+  renderShareMembers();
+  renderTeamSide();
+  renderCollabBadge();
+  showNotif("Membre retiré","blue");
+}
+function changePerm(uid,perm){
+  const u=USERS.find(x=>x.id===uid);
+  if(u){u.perm=perm;showNotif("✅ Permission modifiée","green");}
+}
+function updateShareInfo(){
+  const sel=document.getElementById("share-camp-sel").value;
+  const c=cBy(sel);
+  if(c){
+    html("share-camp-info",`<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:${c.color}"></div><div><div style="font-size:12px;font-weight:700;color:${c.color}">${esc(c.name)}</div><div style="font-size:10px;color:var(--muted)">${c.lines.length} postes · Budget: ${fmtF(cTot(c))}</div></div></div>`);
+    document.getElementById("share-link-val").value="https://dashboard.agitech-cofina.sn/share/"+sel;
+  }
+}
+function openShareCamp(){
+  // Pre-select current campaign
+  const sel=document.getElementById("share-camp-sel");
+  if(ACT)sel.value=ACT;
+  updateShareInfo();
+  renderShareMembers();
+  openModal("mShare");
+}
+function copyShareLink(){
+  const val=document.getElementById("share-link-val").value;
+  navigator.clipboard.writeText(val).then(()=>showNotif("📋 Lien copié !","green")).catch(()=>showNotif("📋 Lien copié !","green"));
+}
+
+// ═══════════════════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════════════════
+function showNotif(msg,type){
+  const el=document.createElement("div");
+  el.className="notif "+(type||"");
+  el.innerHTML=(type==="green"?"✅ ":type==="red"?"⚠️ ":"ℹ️ ")+msg;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.style.opacity="0";el.style.transition="opacity .4s";setTimeout(()=>el.remove(),400)},2800);
+}
+
+// ═══════════════════════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════════════════════
+const CATS={plv:{l:"🗒️ PLV/Impression",c:"#0fcca0"},digital:{l:"📱 Digital/Ads",c:"#1a7fe8"},crea:{l:"🎨 Créa/Production",c:"#8b5cf6"},event:{l:"🎪 Événementiel",c:"#f97316"},autre:{l:"📦 Autre",c:"#6b7a99"}};
+const NET_C={facebook:"#1877f2",instagram:"#e1306c",linkedin:"#0a66c2",tiktok:"#69C9D0",whatsapp:"#25d366",youtube:"#ff0000",twitter:"#1da1f2"};
+const NET_I={facebook:"📘",instagram:"📸",linkedin:"💼",tiktok:"🎵",whatsapp:"💬",youtube:"▶️",twitter:"🐦"};
+const STAT_MAP={active:{txt:"🟢 Actif",bg:"rgba(15,204,160,.13)",c:"#0fcca0",cls:"stat-a"},draft:{txt:"⚪ Brouillon",bg:"rgba(90,106,138,.13)",c:"#6b7a99",cls:"stat-d"},done:{txt:"🟣 Terminé",bg:"rgba(139,92,246,.13)",c:"#a78bfa",cls:"stat-z"}};
+const DEF_STRATS=[{icon:"📱",name:"Facebook / Instagram",body:"Contenu produit + sponsoring ciblé\nCarrousels · Vidéos · Retargeting"},{icon:"💬",name:"WhatsApp Business",body:"Conversion chaude & proforma\nRéponses rapides + partage de liens"},{icon:"🌐",name:"Site Web / Landing",body:"Pop-up prioritaire + bannières\nMention financement fiches produit"},{icon:"📚",name:"Contenus Éducatifs",body:"Comment ça marche ? · FAQ\nTémoignages · Photos livraison"}];
+const DEF_PHASES=[{n:"P1",t:"Lancement Digital",a:"Post FB & LinkedIn · Visuel co-brandé · Facebook Ads"},{n:"P2",t:"Activation Terrain",a:"Affichage showroom · Kakémonos · Flyers agences"},{n:"P3",t:"Activation Display",a:"Bannières ADAFRI · Native Ads ciblées"},{n:"P4",t:"Activation Site Web",a:"Pop-up prioritaire · Bannières horizontales/verticales"}];
+const DEF_MSGS=[{color:"#e5322d",tag:"Message Principal",text:"\"Achetez chez AGITECH, payez à crédit avec COFINA.\""},{color:"#f0a830",tag:"Call to Action",text:"\"Achetez maintenant, payez plus tard avec COFINA\""},{color:"#0fcca0",tag:"Staff COFINA",text:"\"Staff COFINA : -10% sur tous les équipements\""}];
+const DEF_KPIS=[{id:"ventes",icon:"🛒",label:"Ventes/Commandes",target:50,actual:0,unit:"ventes"},{id:"dl",icon:"📥",label:"Téléchargements App",target:200,actual:0,unit:"DL"},{id:"portee",icon:"👁️",label:"Portée (reach)",target:50000,actual:0,unit:"personnes"},{id:"clics",icon:"🖱️",label:"Clics / Trafic",target:2000,actual:0,unit:"clics"},{id:"proformas",icon:"📄",label:"Proformas générées",target:80,actual:0,unit:"proformas"},{id:"dossiers",icon:"✅",label:"Dossiers validés",target:40,actual:0,unit:"dossiers"}];
+const DEF_TRACKS=[{id:uid(),label:"Lien Tracking Principal",url:"https://"},{id:uid(),label:"Lien App Store",url:"https://"}];
+const DEF_NETS=[{id:uid(),net:"facebook",before:0,after:0},{id:uid(),net:"instagram",before:0,after:0}];
+
+let camps=[];
+let ACT=null;
+let SEL_C="#e5322d";
+
+function uid(){return Math.random().toString(36).slice(2,8)+"_"+Date.now().toString(36).slice(-4)}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function fmt(n){return n>=1e6?(n/1e6).toFixed(2)+" M":n>=1e3?(n/1e3).toFixed(0)+" K":n.toLocaleString("fr-FR")}
+function fmtF(n){return n.toLocaleString("fr-FR")+" FCFA"}
+function pct(v,t){return t>0?((v/t)*100).toFixed(1)+"%":"0%"}
+function set(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+function html(id,v){const e=document.getElementById(id);if(e)e.innerHTML=v}
+function cBy(id){return camps.find(c=>c.id===id)}
+function cTot(c){return c.lines.reduce((s,l)=>s+(parseFloat(l.amount)||0),0)}
+function cCats(c){const t={};Object.keys(CATS).forEach(k=>t[k]=0);c.lines.forEach(l=>{t[l.cat]=(t[l.cat]||0)+(parseFloat(l.amount)||0)});return t}
+function mkCamp(name,type,color,status){
+  return{id:uid(),name,type,color,status,
+    lines:[{id:uid(),name:"Flyers (5 000 × 45 FCFA)",cat:"plv",amount:225000},{id:uid(),name:"Kakémonos (10 × 80 000 FCFA)",cat:"plv",amount:800000},{id:uid(),name:"Créa Visuelle & déclinaisons",cat:"crea",amount:200000},{id:uid(),name:"Facebook Ads — Meta ciblée",cat:"digital",amount:200000},{id:uid(),name:"Campagne ADAFRI Display",cat:"digital",amount:300000}],
+    strats:DEF_STRATS.map(s=>({...s})),phases:DEF_PHASES.map(p=>({...p})),msgs:DEF_MSGS.map(m=>({...m})),
+    networks:DEF_NETS.map(n=>({...n,id:uid()})),kpis:DEF_KPIS.map(k=>({...k})),tracks:DEF_TRACKS.map(t=>({...t,id:uid()})),posts:[],processes:[]
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ROUTING
+// ═══════════════════════════════════════════════════════
+function gv(name,el){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
+  document.querySelectorAll(".ni").forEach(n=>n.classList.remove("on"));
+  const v=document.getElementById("v-"+name);if(v)v.classList.add("on");
+  if(el)el.classList.add("on");
+  if(name==="overview"){renderOv();renderSide()}
+  if(name==="processus"){renderGlobalProcess()}
+  if(name==="adsconnect"){initAdsConnect()}
+}
+function showTab(id,btn){
+  document.querySelectorAll(".tcontent").forEach(t=>t.classList.remove("on"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
+  const el=document.getElementById(id);if(el)el.classList.add("on");
+  if(btn)btn.classList.add("on");
+}
+
+// ═══════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════
+function renderSide(){
+  html("sideList",camps.map(c=>`
+    <div class="cc ${c.id===ACT?"on":""}" onclick="openCamp('${c.id}')">
+      <div style="width:7px;height:7px;border-radius:50%;background:${c.color};flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div class="cc-name">${esc(c.name)}</div>
+        <div class="cc-sub">${fmtF(cTot(c))}</div>
+      </div>
+    </div>`).join(""));
+  // Update share modal camp selector
+  const sel=document.getElementById("share-camp-sel");
+  if(sel){
+    sel.innerHTML='<option value="">— Choisir une campagne —</option>'+camps.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════════════════════
+function renderOv(){
+  const tot=camps.reduce((s,c)=>s+cTot(c),0);
+  const nl=camps.reduce((s,c)=>s+c.lines.length,0);
+  set("ov-tot",fmtF(tot));set("ov-nc",camps.length);set("ov-nl",nl);
+  html("ov-kpis",camps.map(c=>`
+    <div class="k" style="--ka:${c.color};cursor:pointer" onclick="openCamp('${c.id}')">
+      <div class="kl" style="color:${c.color}">${esc(c.name)}</div>
+      <div class="kv" style="color:${c.color}">${fmt(cTot(c))}</div>
+      <div class="ks"><span class="badge bm">${pct(cTot(c),tot)} du total</span></div>
+    </div>`).join(""));
+  const allC={};Object.keys(CATS).forEach(k=>allC[k]=0);camps.forEach(c=>{const ct=cCats(c);Object.keys(ct).forEach(k=>allC[k]+=ct[k])});
+  const maxC=Math.max(...Object.values(allC),1);
+  html("ov-cats",Object.entries(CATS).map(([k,cat])=>{const v=allC[k];if(!v)return"";
+    return`<div class="brow"><div class="blbl"><span>${cat.l}</span><b>${fmtF(v)}</b></div><div class="trk"><div class="fill" style="width:${(v/maxC)*100}%;background:${cat.c}"></div></div></div>`}).join(""));
+  const maxCp=Math.max(...camps.map(c=>cTot(c)),1);
+  html("ov-camps-bar",camps.map(c=>`<div class="brow"><div class="blbl"><span style="color:${c.color}">${esc(c.name)}</span><b>${fmtF(cTot(c))}</b></div><div class="trk"><div class="fill" style="width:${(cTot(c)/maxCp)*100}%;background:${c.color}"></div></div></div>`).join(""));
+  const st=s=>STAT_MAP[s]||STAT_MAP.draft;
+  html("ov-table",`<table><thead><tr><th>Campagne</th><th>Type</th><th>Statut</th><th>Postes</th><th>Budget</th><th></th></tr></thead><tbody>${
+    camps.map(c=>`<tr><td><b style="color:${c.color}">${esc(c.name)}</b></td><td><span class="badge bm">${c.type}</span></td><td><span class="${st(c.status).cls}">${st(c.status).txt}</span></td><td>${c.lines.length}</td><td><b style="color:var(--gold)">${fmtF(cTot(c))}</b></td><td><button class="btn btn-ghost" style="font-size:10px;padding:4px 10px" onclick="openCamp('${c.id}')">Ouvrir →</button></td></tr>`).join("")
+  }</tbody></table>`);
+}
+
+// ═══════════════════════════════════════════════════════
+// CAMP DETAIL
+// ═══════════════════════════════════════════════════════
+function openCamp(id){
+  ACT=id;renderSide();
+  gv("camp",null);
+  const c=cBy(id);if(!c)return;
+  document.getElementById("cd-name").textContent=c.name;
+  document.getElementById("cd-name").style.color=c.color;
+  const sm=STAT_MAP[c.status]||STAT_MAP.draft;
+  document.getElementById("cd-stat").className=sm.cls;
+  document.getElementById("cd-stat").textContent=sm.txt;
+  set("cd-sub",`Type: ${c.type} · ${c.lines.length} postes`);
+  set("ctx-camp",c.name);
+  document.getElementById("cd-sel").value=c.status;
+  showTab("tb",document.querySelector(".tab"));
+  renderBudget(c);renderKpi(c);renderSocial(c);renderStrat(c);renderCom(c);renderCampProcess(c);
+}
+
+// ── BUDGET ──
+function renderBudget(c){
+  const T=cTot(c);const ct=cCats(c);
+  html("cd-totbar",`
+    <div class="ti"><div class="tl">Total</div><div class="tv" style="color:var(--gold)">${fmtF(T)}</div></div><div class="tsep"></div>
+    <div class="ti"><div class="tl">PLV</div><div class="tv" style="color:var(--teal)">${fmtF(ct.plv||0)}</div></div><div class="tsep"></div>
+    <div class="ti"><div class="tl">Digital</div><div class="tv" style="color:#60b4f0">${fmtF(ct.digital||0)}</div></div><div class="tsep"></div>
+    <div class="ti"><div class="tl">Créa</div><div class="tv" style="color:#a78bfa">${fmtF(ct.crea||0)}</div></div><div class="tsep"></div>
+    <div class="ti"><div class="tl">Autre</div><div class="tv" style="color:var(--muted)">${fmtF((ct.event||0)+(ct.autre||0))}</div></div>`);
+  html("lbody",c.lines.map(l=>`
+    <div class="lgrid lrow" data-lid="${l.id}">
+      <input class="fi fi-b" type="text" value="${esc(l.name)}" placeholder="Poste..." onchange="upL('${l.id}','name',this.value)"/>
+      <select class="fi" onchange="upL('${l.id}','cat',this.value)">${Object.entries(CATS).map(([k,v])=>`<option value="${k}" ${l.cat===k?"selected":""}>${v.l}</option>`).join("")}</select>
+      <input class="fi fi-num" type="number" value="${l.amount}" min="0" step="1000" oninput="upL('${l.id}','amount',this.value)"/>
+      <div class="lt" id="lt-${l.id}">${fmtF(parseFloat(l.amount)||0)}</div>
+      <button class="del" onclick="delL('${l.id}')">✕</button>
+    </div>`).join(""));
+  const maxV=Math.max(...Object.values(ct),1);
+  html("cd-bars",Object.entries(CATS).map(([k,cat])=>{const v=ct[k]||0;if(!v)return"";
+    return`<div class="brow"><div class="blbl"><span>${cat.l}</span><b>${fmtF(v)} <span style="color:var(--muted)">(${pct(v,T)})</span></b></div><div class="trk"><div class="fill" style="width:${(v/maxV)*100}%;background:${cat.c}"></div></div></div>`}).join(""));
+  html("cd-recap",c.lines.map(l=>`<div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0;border-bottom:var(--bd)"><span style="color:var(--muted)">${esc(l.name)}</span><b style="color:var(--gold)">${fmtF(parseFloat(l.amount)||0)}</b></div>`).join("")
+    +`<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800;padding:8px 0;color:var(--gold)"><span>TOTAL</span><span>${fmtF(T)}</span></div>`);
+}
+function upL(lid,field,val){
+  const c=cBy(ACT);const l=c.lines.find(x=>x.id===lid);if(!l)return;
+  if(field==="amount"){l.amount=parseFloat(val)||0;set("lt-"+lid,fmtF(l.amount));}
+  else l[field]=val;
+  renderBudget(c);
+}
+function addL(){const c=cBy(ACT);c.lines.push({id:uid(),name:"Nouveau poste",cat:"autre",amount:0});renderBudget(c);}
+function delL(lid){const c=cBy(ACT);c.lines=c.lines.filter(l=>l.id!==lid);renderBudget(c);}
+function applyL(){const c=cBy(ACT);
+  document.querySelectorAll("#lbody .lrow").forEach(row=>{
+    const lid=row.dataset.lid;const l=c.lines.find(x=>x.id===lid);if(!l)return;
+    const ni=row.querySelector(".fi-b");const ai=row.querySelector(".fi-num");const si=row.querySelector("select");
+    if(ni)l.name=ni.value;if(ai)l.amount=parseFloat(ai.value)||0;if(si)l.cat=si.value;
+  });renderBudget(c);
+}
+
+// ── KPIs ──
+function renderKpi(c){
+  const T=cTot(c);const ratio=T/1725000;
+  html("kpi-targets",c.kpis.map(k=>{
+    const p=k.target>0?Math.min((k.actual/k.target)*100,100):0;
+    const col=p>=100?"#0fcca0":p>=60?"#f0a830":"#1a7fe8";
+    return`<div class="ktcard">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;justify-content:space-between">${k.icon} ${k.label}<span class="badge bm">${k.unit}</span></div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:3px">Objectif</div>
+      <input class="fi" type="number" value="${k.target}" min="0" style="font-size:15px;font-weight:700;margin-bottom:5px" onchange="upKpi('${k.id}','target',this.value)"/>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);margin-bottom:5px">
+        <span>Réel actuel:</span>
+        <input type="number" value="${k.actual}" min="0" class="fi" style="width:85px;font-size:11px;padding:3px 6px;text-align:right" onchange="upKpi('${k.id}','actual',this.value)"/>
+      </div>
+      <div class="ktbar"><div class="ktfill" style="width:${p}%;background:${col}"></div></div>
+    </div>`}).join(""));
+  html("kpi-prog",c.kpis.map(k=>{const p=k.target>0?Math.min((k.actual/k.target)*100,100):0;const col=p>=100?"#0fcca0":p>=60?"#f0a830":"#1a7fe8";
+    return`<div class="brow"><div class="blbl"><span>${k.icon} ${k.label}</span><b style="color:${col}">${k.actual}/${k.target} ${k.unit}</b></div><div class="trk"><div class="fill" style="width:${p}%;background:${col}"></div></div></div>`}).join(""));
+  html("kpi-track",`<div style="display:flex;flex-direction:column;gap:8px">${c.tracks.map(t=>`
+    <div style="background:var(--s2);border:var(--bd);border-radius:8px;padding:10px">
+      <div style="font-size:9px;color:var(--muted);font-weight:700;margin-bottom:5px;text-transform:uppercase">${esc(t.label)}</div>
+      <div style="display:flex;gap:5px">
+        <input class="fi" type="text" value="${esc(t.url)}" style="font-size:11px" onchange="upTrack('${t.id}',this.value)"/>
+        <a href="${esc(t.url)}" target="_blank" style="display:flex;align-items:center;padding:0 8px;background:var(--s3);border:var(--bd);border-radius:6px;text-decoration:none;font-size:13px">🔗</a>
+        <button class="del" onclick="delTrack('${t.id}')">✕</button>
+      </div>
+    </div>`).join("")}
+  <button class="btn-al" onclick="addTrack()">＋ Ajouter lien tracking</button></div>`);
+  const PROJ=[["📣","Portée estimée",Math.round(50000*ratio).toLocaleString("fr-FR"),"personnes","#1a7fe8"],
+    ["🛒","Ventes projetées",Math.round(42*ratio),"ventes","#0fcca0"],["📄","Proformas",Math.round(95*ratio),"proformas","#f0a830"],
+    ["✅","Dossiers COFINA",Math.round(58*ratio),"validés","#e5322d"],["📥","Téléchargements",Math.round(200*ratio),"DL","#8b5cf6"]];
+  html("kpi-proj",`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:10px">${
+    PROJ.map(([ic,lb,v,u,col])=>`<div class="k" style="--ka:${col}"><div class="kl">${ic} ${lb}</div><div class="kv" style="color:${col}">${v}</div><div class="ks">${u}</div></div>`).join("")}
+  </div><div style="font-size:11px;color:var(--muted);font-style:italic">⚡ Estimations proportionnelles au budget vs référence 1 725 000 FCFA</div>`);
+}
+function upKpi(kid,field,val){const c=cBy(ACT);const k=c.kpis.find(x=>x.id===kid);if(k){k[field]=parseFloat(val)||0;renderKpi(c);}}
+function upTrack(tid,val){const c=cBy(ACT);const t=c.tracks.find(x=>x.id===tid);if(t)t.url=val;}
+function addTrack(){const c=cBy(ACT);c.tracks.push({id:uid(),label:"Nouveau lien",url:"https://"});renderKpi(c);}
+function delTrack(tid){const c=cBy(ACT);c.tracks=c.tracks.filter(t=>t.id!==tid);renderKpi(c);}
+function autoKpi(){const c=cBy(ACT);const T=cTot(c);const r=T/1725000;const m={ventes:50,dl:200,portee:50000,clics:2000,proformas:80,dossiers:40};c.kpis.forEach(k=>{if(m[k.id])k.target=Math.round(m[k.id]*r)});renderKpi(c);}
+
+// ── SOCIAL ──
+function renderSocial(c){
+  html("fol-grid",c.networks.map((n,i)=>{
+    const diff=(n.after||0)-(n.before||0);const p=n.before>0?(((n.after||0)/n.before)*100).toFixed(1):null;
+    const col=NET_C[n.net]||"#1a7fe8";
+    return`<div class="fcard">
+      <div class="fnet">
+        <select class="fi" style="font-size:11px;font-weight:700;color:${col};background:transparent;border:none;cursor:pointer" onchange="upNet(${i},'net',this.value)">
+          ${Object.keys(NET_C).map(k=>`<option value="${k}" ${n.net===k?"selected":""}>${NET_I[k]} ${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}
+        </select>
+        <button class="del" onclick="delNet(${i})">✕</button>
+      </div>
+      <div class="frow"><span class="flbl">Avant campagne</span><input class="finp" type="number" value="${n.before||0}" min="0" oninput="upNet(${i},'before',this.value)"/></div>
+      <div class="frow"><span class="flbl">Après campagne</span><input class="finp" type="number" value="${n.after||0}" min="0" oninput="upNet(${i},'after',this.value)"/></div>
+      <div class="frow" style="margin-top:4px"><span class="flbl">Évolution</span>
+        <span class="fdiff ${diff>=0?"up":"dn"}">${diff>=0?"+":""}${diff.toLocaleString("fr-FR")}${p?" ("+p+"%)":""}</span>
+      </div>
+      <div style="margin-top:7px"><div class="trk"><div class="fill" style="width:${n.before>0?Math.min(((n.after||0)/n.before)*100,200):0}%;background:${col}"></div></div></div>
+    </div>`}).join(""));
+  renderPosts(c);
+}
+function upNet(i,field,val){const c=cBy(ACT);c.networks[i][field]=field==="net"?val:(parseFloat(val)||0);renderSocial(c);}
+function delNet(i){const c=cBy(ACT);c.networks.splice(i,1);renderSocial(c);}
+function addNet(){const c=cBy(ACT);c.networks.push({id:uid(),net:"facebook",before:0,after:0});renderSocial(c);}
+
+function renderPosts(c){
+  if(!c.posts||c.posts.length===0){html("post-grid","<div style='grid-column:1/-1;text-align:center;padding:28px;color:var(--muted)'><div style='font-size:32px;margin-bottom:10px'>✨</div><div style='font-size:12px'>Cliquez sur Générer via IA pour créer des contenus adaptés</div></div>");return;}
+  html("post-grid",c.posts.map((p,i)=>{const col=NET_C[p.net]||"#1a7fe8";
+    return`<div class="pcard">
+      <div class="pnet" style="background:${col}22;color:${col}">${NET_I[p.net]||"📱"} ${(p.net||"").charAt(0).toUpperCase()+(p.net||"").slice(1)}</div>
+      <textarea class="ptext" onblur="updPost(${i},this.value)">${esc(p.content)}</textarea>
+      ${p.meta?`<div class="pmeta">📌 ${esc(p.meta)}</div>`:""}
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-teal" style="font-size:10px;padding:4px 9px" onclick="copyPost(${i})">📋 Copier</button>
+        <button class="btn btn-ghost" style="font-size:10px;padding:4px 9px" onclick="regenPost(${i})">↺ Régénérer</button>
+        <button class="btn btn-red" style="font-size:10px;padding:4px 9px" onclick="delPost(${i})">✕</button>
+      </div>
+    </div>`}).join(""));
+}
+function updPost(i,v){const c=cBy(ACT);if(c.posts[i])c.posts[i].content=v;}
+function copyPost(i){const c=cBy(ACT);if(c.posts[i])navigator.clipboard.writeText(c.posts[i].content).catch(()=>{});}
+function delPost(i){const c=cBy(ACT);c.posts.splice(i,1);renderPosts(c);}
+
+// ═══════════════════════════════════════════════════════
+// IA GENERATION
+// ═══════════════════════════════════════════════════════
+function safeParseJSON(raw){
+  if(!raw||!raw.trim())throw new Error("Réponse vide de l'API.");
+  let s=raw.replace(/^\uFEFF/,"").trim();
+  s=s.replace(/^```(?:json)?\r?\n?/i,"").replace(/\r?\n?```$/,"").trim();
+  try{return JSON.parse(s);}catch(_){}
+  const a=s.match(/\[[\s\S]*\]/);
+  if(a){try{return JSON.parse(a[0]);}catch(_){}}
+  const o=s.match(/\{[\s\S]*\}/);
+  if(o){try{return JSON.parse(o[0]);}catch(_){}}
+  throw new Error("Impossible de lire la réponse IA.");
+}
+async function genPosts(){
+  const c=cBy(ACT);if(!c)return;
+  const nb=parseInt(document.getElementById("nb-posts").value)||3;
+  const nets=[...new Set(c.networks.map(n=>n.net))].slice(0,nb);
+  while(nets.length<nb)nets.push(["facebook","instagram","linkedin"][nets.length%3]);
+  html("ai-out","<div style='margin-top:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px'><div style='font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:6px'><span class=spinner></span> Génération IA en cours...</div></div>");
+  const system="Tu es un expert en marketing digital Afrique de l'Ouest. Tu réponds TOUJOURS et UNIQUEMENT avec du JSON valide, sans aucun texte, explication ou formatage markdown autour.";
+  const userMsg=`Campagne: "${c.name}" (${c.type}). Contexte: AGITECH×COFINA, vente équipements électroniques à crédit. Slogan: "Achetez chez AGITECH, payez avec COFINA."\nGénère exactement ${nb} posts pour ces réseaux dans l'ordre: ${nets.join(", ")}.\nRetourne UNIQUEMENT ce tableau JSON (rien d'autre):\n[{"net":"NOM_RESEAU","content":"texte complet du post avec emojis et hashtags","meta":"Meilleur moment: mardi 10h · Format recommandé: Image"}]`;
+  try{
+    const r=await callAnthropicAPIWithSystem(system,userMsg,1600);
+    if(!r.ok){const e=await r.json();throw new Error("Erreur API "+r.status+": "+(e.error?.message||r.statusText));}
+    const d=await r.json();
+    if(d.error)throw new Error("Erreur API: "+d.error.message);
+    const raw=d.content?.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const posts=safeParseJSON(raw);
+    const arr=Array.isArray(posts)?posts:[posts];
+    c.posts=[...c.posts,...arr];
+    html("ai-out","");renderPosts(c);
+    showNotif("✅ "+arr.length+" posts générés !","green");
+  }catch(e){
+    html("ai-out",`<div style="margin-top:12px;background:rgba(229,50,45,.08);border:1px solid rgba(229,50,45,.2);border-radius:10px;padding:14px;font-size:12px;color:#f87171">⚠️ ${e.message}</div>`);
+  }
+}
+async function regenPost(i){
+  const c=cBy(ACT);const p=c.posts[i];if(!p)return;
+  c.posts[i]={...p,content:"⏳ Régénération..."};renderPosts(c);
+  const system="Tu es un expert en marketing digital. Tu réponds TOUJOURS et UNIQUEMENT avec du JSON valide, sans texte ni markdown autour.";
+  const userMsg=`Génère 1 nouveau post ${p.net} pour la campagne "${c.name}" (AGITECH×COFINA).\nRetourne UNIQUEMENT cet objet JSON (rien d'autre):\n{"net":"${p.net}","content":"texte complet du post","meta":"conseil de publication"}`;
+  try{
+    const r=await callAnthropicAPIWithSystem(system,userMsg,600);
+    if(!r.ok){const e=await r.json();throw new Error("Erreur "+r.status);}
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+    const raw=d.content?.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const np=safeParseJSON(raw);
+    c.posts[i]={...c.posts[i],...(Array.isArray(np)?np[0]:np)};renderPosts(c);
+  }catch(e){c.posts[i]=p;renderPosts(c);showNotif("⚠️ "+e.message,"red");}
+}
+
+// ── STRATÉGIE ──
+function renderStrat(c){
+  html("strat-list",c.strats.map((s,i)=>`
+    <div class="sedit">
+      <div style="display:flex;align-items:center;margin-bottom:8px">
+        <input class="sicon-inp" type="text" value="${esc(s.icon)}" maxlength="2" onchange="upStrat(${i},'icon',this.value)"/>
+        <input class="sname-inp" type="text" value="${esc(s.name)}" placeholder="Canal..." onchange="upStrat(${i},'name',this.value)"/>
+        <button class="del" onclick="delStrat(${i})">✕</button>
+      </div>
+      <textarea class="sbody-ta" onchange="upStrat(${i},'body',this.value)">${esc(s.body)}</textarea>
+    </div>`).join(""));
+}
+function upStrat(i,f,v){const c=cBy(ACT);c.strats[i][f]=v;}
+function delStrat(i){const c=cBy(ACT);c.strats.splice(i,1);renderStrat(c);}
+function addStrat(){const c=cBy(ACT);c.strats.push({icon:"📌",name:"Nouveau canal",body:"Description..."});renderStrat(c);}
+
+async function aiOptimizeStrat(){
+  const c=cBy(ACT);if(!c)return;
+  const aiOut=document.getElementById("strat-ai-out");
+  aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px"><div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:6px"><span class="spinner"></span> Optimisation IA de la stratégie en cours...</div></div>`;
+  const existing=c.strats.map(s=>`${s.icon} ${s.name}: ${s.body}`).join("\n");
+  const budget=cTot(c);
+  const system="Tu es un expert en stratégie marketing digital Afrique de l'Ouest, spécialisé dans la distribution d'électronique et le financement. Tu réponds TOUJOURS et UNIQUEMENT avec du JSON valide, sans aucun texte ni markdown autour.";
+  const userMsg=`Campagne: "${c.name}" (${c.type}). Budget total: ${budget.toLocaleString('fr-FR')} FCFA. Contexte: AGITECH×COFINA, vente équipements électroniques à crédit. Slogan: "Achetez chez AGITECH, payez avec COFINA."
+
+Canaux actuels:
+${existing}
+
+Optimise et améliore cette stratégie digitale. Garde les canaux pertinents, améliore les descriptions et ajoute des recommandations concrètes adaptées au marché sénégalais et au budget disponible.
+
+Retourne UNIQUEMENT ce tableau JSON (rien d'autre):
+[{"icon":"emoji","name":"Nom du canal","body":"Description détaillée avec tactiques concrètes et recommandations spécifiques"}]`;
+  try{
+    const r=await callAnthropicAPIWithSystem(system,userMsg,2000);
+    if(!r.ok){const e=await r.json();throw new Error("Erreur API "+r.status+": "+(e.error?.message||r.statusText));}
+    const d=await r.json();
+    if(d.error)throw new Error("Erreur API: "+d.error.message);
+    const raw=d.content?.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const strats=safeParseJSON(raw);
+    const arr=Array.isArray(strats)?strats:[strats];
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px">
+      <div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:10px">✨ ${arr.length} stratégies optimisées par l'IA — Souhaitez-vous les appliquer ?</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+        ${arr.map((s,i)=>`<div style="background:var(--s3);border:var(--bd);border-radius:8px;padding:10px">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">${esc(s.icon||'📌')} ${esc(s.name)}</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">${esc(s.body)}</div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ai" onclick="applyAIStrats(${JSON.stringify(arr).replace(/"/g,'&quot;')})">✓ Appliquer ces stratégies</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('strat-ai-out').innerHTML=''">✕ Ignorer</button>
+      </div>
+    </div>`;
+    showNotif("✅ Stratégie optimisée par l'IA !","green");
+  }catch(e){
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(229,50,45,.08);border:1px solid rgba(229,50,45,.2);border-radius:10px;padding:14px;font-size:12px;color:#f87171">⚠️ ${e.message}</div>`;
+  }
+}
+function applyAIStrats(stratsJson){
+  try{
+    const arr=typeof stratsJson==="string"?JSON.parse(stratsJson):stratsJson;
+    const c=cBy(ACT);if(!c)return;
+    c.strats=arr.map(s=>({icon:s.icon||'📌',name:s.name||'Canal',body:s.body||''}));
+    document.getElementById("strat-ai-out").innerHTML="";
+    renderStrat(c);
+    showNotif("✅ Stratégies appliquées !","green");
+  }catch(e){showNotif("⚠️ Erreur: "+e.message,"red");}
+}
+
+// ── PLAN DE COM ──
+function renderCom(c){
+  html("phases-list",c.phases.map((p,i)=>`
+    <div class="phase">
+      <div class="ph-n">${esc(p.n)}</div>
+      <div style="flex:1">
+        <input class="fi" type="text" value="${esc(p.t)}" style="margin-bottom:5px;font-size:11px;font-weight:600" onchange="upPhase(${i},'t',this.value)"/>
+        <textarea class="sbody-ta" style="min-height:36px" onchange="upPhase(${i},'a',this.value)">${esc(p.a)}</textarea>
+      </div>
+      <button class="del" onclick="delPhase(${i})">✕</button>
+    </div>`).join(""));
+  html("msgs-list",c.msgs.map((m,i)=>`
+    <div class="msg-block">
+      <div class="msg-bar" style="background:${m.color}"></div>
+      <div style="flex:1">
+        <input class="fi" type="text" value="${esc(m.tag)}" style="font-size:10px;font-weight:700;margin-bottom:4px;text-transform:uppercase" onchange="upMsg(${i},'tag',this.value)"/>
+        <input class="fi" type="text" value="${esc(m.text)}" style="font-size:12px;font-weight:600" onchange="upMsg(${i},'text',this.value)"/>
+      </div>
+      <button class="del" onclick="delMsg(${i})">✕</button>
+    </div>`).join(""));
+}
+function upPhase(i,f,v){const c=cBy(ACT);c.phases[i][f]=v;}
+function delPhase(i){const c=cBy(ACT);c.phases.splice(i,1);renderCom(c);}
+function addPhase(){const c=cBy(ACT);c.phases.push({n:"P"+(c.phases.length+1),t:"Nouvelle phase",a:"Actions..."});renderCom(c);}
+function upMsg(i,f,v){const c=cBy(ACT);c.msgs[i][f]=v;}
+function delMsg(i){const c=cBy(ACT);c.msgs.splice(i,1);renderCom(c);}
+function addMsg(){const c=cBy(ACT);c.msgs.push({color:"#1a7fe8",tag:"Nouveau message",text:"\"Votre message ici\""});renderCom(c);}
+
+async function aiGenPlan(){
+  const c=cBy(ACT);if(!c)return;
+  const aiOut=document.getElementById("plan-ai-out");
+  aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px"><div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:6px"><span class="spinner"></span> Génération du plan de communication via IA...</div></div>`;
+  const budget=cTot(c);
+  const nets=c.networks.map(n=>n.net).join(", ")||"facebook, instagram";
+  const system="Tu es un expert en communication marketing pour l'Afrique de l'Ouest. Tu réponds TOUJOURS et UNIQUEMENT avec du JSON valide, sans aucun texte ni markdown autour.";
+  const userMsg=`Campagne: "${c.name}" (${c.type}). Budget: ${budget.toLocaleString('fr-FR')} FCFA. Réseaux: ${nets}. Contexte: AGITECH×COFINA, électronique à crédit au Sénégal.
+
+Génère un plan de communication en 4-5 phases chronologiques, adapté à cette campagne et au marché sénégalais.
+
+Retourne UNIQUEMENT ce tableau JSON (rien d'autre):
+[{"n":"P1","t":"Titre de la phase","a":"Actions concrètes à mener pour cette phase, séparées par · "}]`;
+  try{
+    const r=await callAnthropicAPIWithSystem(system,userMsg,1500);
+    if(!r.ok){const e=await r.json();throw new Error("Erreur "+r.status);}
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+    const raw=d.content?.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const phases=safeParseJSON(raw);
+    const arr=Array.isArray(phases)?phases:[phases];
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px">
+      <div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:10px">✨ Plan de communication généré par l'IA</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
+        ${arr.map(p=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:9px;background:var(--s3);border-radius:8px">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(139,92,246,.2);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">${esc(p.n)}</div>
+          <div><div style="font-size:11px;font-weight:700;margin-bottom:3px">${esc(p.t)}</div><div style="font-size:10px;color:var(--muted);line-height:1.5">${esc(p.a)}</div></div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ai" onclick="applyAIPlan(${JSON.stringify(arr).replace(/"/g,'&quot;')})">✓ Appliquer ce plan</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('plan-ai-out').innerHTML=''">✕ Ignorer</button>
+      </div>
+    </div>`;
+    showNotif("✅ Plan de communication généré !","green");
+  }catch(e){
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(229,50,45,.08);border:1px solid rgba(229,50,45,.2);border-radius:10px;padding:14px;font-size:12px;color:#f87171">⚠️ ${e.message}</div>`;
+  }
+}
+function applyAIPlan(planJson){
+  try{
+    const arr=typeof planJson==="string"?JSON.parse(planJson):planJson;
+    const c=cBy(ACT);if(!c)return;
+    c.phases=arr.map(p=>({n:p.n||'P?',t:p.t||'Phase',a:p.a||''}));
+    document.getElementById("plan-ai-out").innerHTML="";
+    renderCom(c);
+    showNotif("✅ Plan appliqué !","green");
+  }catch(e){showNotif("⚠️ Erreur: "+e.message,"red");}
+}
+
+async function aiGenMsgs(){
+  const c=cBy(ACT);if(!c)return;
+  const aiOut=document.getElementById("msgs-ai-out");
+  aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px"><div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:6px"><span class="spinner"></span> Génération des messages clés via IA...</div></div>`;
+  const system="Tu es un expert en copywriting et communication marketing pour l'Afrique de l'Ouest. Tu réponds TOUJOURS et UNIQUEMENT avec du JSON valide, sans aucun texte ni markdown autour.";
+  const userMsg=`Campagne: "${c.name}" (${c.type}). Contexte: AGITECH×COFINA, électronique à crédit au Sénégal. Slogan: "Achetez chez AGITECH, payez avec COFINA."
+
+Génère 4-5 messages clés percutants pour cette campagne (slogans, call-to-action, messages cibles différents: grand public, staff COFINA, PME, digital).
+
+Retourne UNIQUEMENT ce tableau JSON (rien d'autre):
+[{"color":"#hexcolor","tag":"TYPE DU MESSAGE","text":"\\\"Le message accrocheur entre guillemets\\\""}]
+
+Utilise ces couleurs: #e5322d (principal), #f0a830 (CTA), #0fcca0 (staff/avantage), #1a7fe8 (digital), #8b5cf6 (premium)`;
+  try{
+    const r=await callAnthropicAPIWithSystem(system,userMsg,1200);
+    if(!r.ok){const e=await r.json();throw new Error("Erreur "+r.status);}
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+    const raw=d.content?.filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const msgs=safeParseJSON(raw);
+    const arr=Array.isArray(msgs)?msgs:[msgs];
+    const COLORS=["#e5322d","#f0a830","#0fcca0","#1a7fe8","#8b5cf6"];
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:14px">
+      <div style="font-size:11px;color:#8b5cf6;font-weight:700;margin-bottom:10px">✨ Messages clés générés par l'IA</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
+        ${arr.map((m,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:9px;background:var(--s3);border-radius:8px;border-left:3px solid ${m.color||COLORS[i%COLORS.length]}">
+          <div><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:${m.color||COLORS[i%COLORS.length]};margin-bottom:4px">${esc(m.tag)}</div>
+          <div style="font-size:12px;font-weight:600">${esc(m.text)}</div></div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ai" onclick="applyAIMsgs(${JSON.stringify(arr).replace(/"/g,'&quot;')})">✓ Appliquer ces messages</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('msgs-ai-out').innerHTML=''">✕ Ignorer</button>
+      </div>
+    </div>`;
+    showNotif("✅ Messages clés générés !","green");
+  }catch(e){
+    aiOut.innerHTML=`<div style="margin-bottom:12px;background:rgba(229,50,45,.08);border:1px solid rgba(229,50,45,.2);border-radius:10px;padding:14px;font-size:12px;color:#f87171">⚠️ ${e.message}</div>`;
+  }
+}
+function applyAIMsgs(msgsJson){
+  try{
+    const arr=typeof msgsJson==="string"?JSON.parse(msgsJson):msgsJson;
+    const c=cBy(ACT);if(!c)return;
+    const COLORS=["#e5322d","#f0a830","#0fcca0","#1a7fe8","#8b5cf6"];
+    c.msgs=arr.map((m,i)=>({color:m.color||COLORS[i%COLORS.length],tag:m.tag||'Message',text:m.text||''}));
+    document.getElementById("msgs-ai-out").innerHTML="";
+    renderCom(c);
+    showNotif("✅ Messages appliqués !","green");
+  }catch(e){showNotif("⚠️ Erreur: "+e.message,"red");}
+}
+
+// ── STATUS ──
+function updStat(){const c=cBy(ACT);c.status=document.getElementById("cd-sel").value;openCamp(ACT);}
+function delCamp(){if(!confirm("Supprimer cette campagne ?"))return;camps=camps.filter(c=>c.id!==ACT);renderSide();gv("overview",document.querySelector("[data-v=overview]"));renderOv();}
+
+// ═══════════════════════════════════════════════════════
+// PROCESSUS GLOBAL
+// ═══════════════════════════════════════════════════════
+let GLOBAL_PROCESSES=[
+  {id:"gp1",title:"Employé COFINA — Showroom",icon:"👔",color:"#e5322d",steps:[
+    {t:"Sélection Produits",d:"L'employé choisit en showroom AGITECH"},
+    {t:"Création Compte",d:"L'agent CCBM crée le compte client"},
+    {t:"Validation Proforma",d:"L'employé valide la proforma établie"},
+    {t:"Formulaire Crédit",d:"CCBM remplit + fait signer l'agent COFINA"},
+    {t:"Envoi Documents",d:"Proformas + formulaire → Resp. Capital Humain"},
+    {t:"Validation COFINA",d:"RCH valide → Bon de commande par e-mail"},
+    {t:"Livraison + Paiement",d:"CCBM livre · BL envoyé · COFINA paie (-7%)"}
+  ]},
+  {id:"gp2",title:"Client COFINA — En Ligne",icon:"👤",color:"#1a7fe8",steps:[
+    {t:"Création Compte",d:"Le client crée son compte en ligne"},
+    {t:"Sélection Produits",d:"Choix via catalogue en ligne"},
+    {t:"Option Financement",d:"Sélection paiement par financement"},
+    {t:"Structure CLIENT",d:"Choix de la structure COFINA"},
+    {t:"Formulaire + Validation",d:"Remplissage en ligne + validation commande"},
+    {t:"Vérification CCBM",d:"L'équipe CCBM vérifie + envoie docs CDC"},
+    {t:"Livraison + Paiement",d:"Identique parcours showroom — état fin de mois"}
+  ]}
+];
+
+let SEL_GP_ICON="👔",SEL_GP_COL="#e5322d";
+let SEL_CP_ICON="📋",SEL_CP_COL="#e5322d";
+
+function renderGlobalProcess(){
+  const container=document.getElementById("global-proc-grid");
+  if(!container)return;
+  if(!GLOBAL_PROCESSES.length){
+    container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:32px;margin-bottom:10px">📋</div><div style="font-size:12px">Aucun processus global. Cliquez sur "＋ Nouveau processus global" pour commencer.</div></div>`;
+    return;
+  }
+  // Responsive: auto-fit columns
+  container.style.display="grid";
+  container.style.gridTemplateColumns="repeat(auto-fit,minmax(280px,1fr))";
+  container.style.gap="14px";
+  container.innerHTML=GLOBAL_PROCESSES.map((proc,pi)=>`
+    <div class="card" style="border-top:2px solid ${proc.color}">
+      <div class="card-t" style="justify-content:space-between">
+        <span>${proc.icon} ${esc(proc.title)}</span>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-ghost" style="font-size:10px;padding:4px 8px" onclick="editGlobalProcess(${pi})">✏️ Éditer</button>
+          <button class="del" onclick="delGlobalProcess(${pi})" title="Supprimer ce processus">✕</button>
+        </div>
+      </div>
+      <div>${proc.steps.map((s,i)=>`
+        <div class="pfstep" style="min-height:38px">
+          <div class="pfl">
+            <div class="pfc" style="border:2px solid ${proc.color};color:${proc.color}">${String(i+1).padStart(2,"0")}</div>
+            ${i<proc.steps.length-1?`<div class="pfline"></div>`:""}
+          </div>
+          <div class="pfc-cont" style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+            <div>
+              <div class="pfc-t">${esc(s.t)}</div>
+              <div class="pfc-d">${esc(s.d)}</div>
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              ${i>0?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveGPStep(${pi},${i},-1)" title="Monter">↑</button>`:""}
+              ${i<proc.steps.length-1?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveGPStep(${pi},${i},1)" title="Descendre">↓</button>`:""}
+              <button class="del" onclick="delGPStep(${pi},${i})" title="Supprimer">✕</button>
+            </div>
+          </div>
+        </div>`).join("")}
+      </div>
+      <button class="btn-al" style="margin-top:8px;width:100%" onclick="addGPStep(${pi})">＋ Ajouter une étape</button>
+    </div>`).join("");
+}
+
+function delGlobalProcess(pi){
+  if(!confirm("Supprimer ce processus global ?"))return;
+  GLOBAL_PROCESSES.splice(pi,1);
+  renderGlobalProcess();
+  showNotif("Processus supprimé","blue");
+}
+function addGPStep(pi){
+  const t=prompt("Titre de l'étape:");
+  if(!t)return;
+  const d=prompt("Description (optionnel):")||"";
+  GLOBAL_PROCESSES[pi].steps.push({t,d});
+  renderGlobalProcess();
+}
+function delGPStep(pi,si){
+  GLOBAL_PROCESSES[pi].steps.splice(si,1);
+  renderGlobalProcess();
+}
+function moveGPStep(pi,si,dir){
+  const steps=GLOBAL_PROCESSES[pi].steps;
+  const ni=si+dir;
+  if(ni<0||ni>=steps.length)return;
+  [steps[si],steps[ni]]=[steps[ni],steps[si]];
+  renderGlobalProcess();
+}
+
+let EDIT_GP_IDX=null;
+function editGlobalProcess(pi){
+  const proc=GLOBAL_PROCESSES[pi];
+  EDIT_GP_IDX=pi;
+  document.getElementById("gp-title").value=proc.title;
+  SEL_GP_ICON=proc.icon;SEL_GP_COL=proc.color;
+  document.getElementById("gp-steps").value=proc.steps.map(s=>s.t+(s.d?"|"+s.d:"")).join("\n");
+  // Reset icon/color pickers
+  document.querySelectorAll(".gp-icon-opt").forEach(el=>el.style.background=el.dataset.icon===proc.icon?"var(--s3)":"var(--s2)");
+  document.querySelectorAll(".gp-col-opt").forEach(el=>el.classList.toggle("on",el.dataset.col===proc.color));
+  openModal("mAddGlobalProcess");
+}
+function pickGPIcon(el){
+  document.querySelectorAll(".gp-icon-opt").forEach(e=>e.style.background="var(--s2)");
+  el.style.background="var(--s3)";
+  SEL_GP_ICON=el.dataset.icon;
+}
+function pickGPColor(el){
+  document.querySelectorAll(".gp-col-opt").forEach(e=>e.classList.remove("on"));
+  el.classList.add("on");SEL_GP_COL=el.dataset.col;
+}
+function saveGlobalProcess(){
+  const title=document.getElementById("gp-title").value.trim();
+  if(!title){showNotif("⚠️ Entrez un titre","red");return;}
+  const rawSteps=document.getElementById("gp-steps").value.trim();
+  const steps=rawSteps?rawSteps.split("\n").filter(l=>l.trim()).map(l=>{const parts=l.split("|");return{t:parts[0].trim(),d:(parts[1]||"").trim()}}):[{t:"Étape 1",d:"Description..."}];
+  const proc={id:"gp"+Date.now(),title,icon:SEL_GP_ICON,color:SEL_GP_COL,steps};
+  if(EDIT_GP_IDX!==null){GLOBAL_PROCESSES[EDIT_GP_IDX]=proc;EDIT_GP_IDX=null;}
+  else GLOBAL_PROCESSES.push(proc);
+  document.getElementById("gp-title").value="";
+  document.getElementById("gp-steps").value="";
+  closeOv("mAddGlobalProcess");
+  renderGlobalProcess();
+  showNotif("✅ Processus "+(EDIT_GP_IDX!==null?"modifié":"créé"),"green");
+}
+
+// ═══════════════════════════════════════════════════════
+// PROCESSUS PAR CAMPAGNE
+// ═══════════════════════════════════════════════════════
+function renderCampProcess(c){
+  const container=document.getElementById("camp-proc-list");
+  if(!container)return;
+  if(!c.processes||!c.processes.length){
+    container.innerHTML=`<div style="text-align:center;padding:32px;color:var(--muted);border:1px dashed #1f2840;border-radius:12px">
+      <div style="font-size:28px;margin-bottom:8px">📋</div>
+      <div style="font-size:12px;margin-bottom:12px">Aucun processus pour cette campagne.</div>
+      <button class="btn btn-gold" onclick="addCampProcess()">＋ Créer un processus</button>
+    </div>`;
+    return;
+  }
+  container.style.display="grid";
+  container.style.gridTemplateColumns="repeat(auto-fit,minmax(280px,1fr))";
+  container.style.gap="14px";
+  container.innerHTML=c.processes.map((proc,pi)=>`
+    <div class="card" style="border-top:2px solid ${proc.color}">
+      <div class="card-t" style="justify-content:space-between">
+        <span>${proc.icon} ${esc(proc.title)}</span>
+        <div style="display:flex;gap:4px">
+          <button class="del" onclick="delCampProcess(${pi})" title="Supprimer">✕</button>
+        </div>
+      </div>
+      <div>${proc.steps.map((s,i)=>`
+        <div class="pfstep" style="min-height:38px">
+          <div class="pfl">
+            <div class="pfc" style="border:2px solid ${proc.color};color:${proc.color}">${String(i+1).padStart(2,"0")}</div>
+            ${i<proc.steps.length-1?`<div class="pfline"></div>`:""}
+          </div>
+          <div class="pfc-cont" style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+            <div>
+              <div class="pfc-t">${esc(s.t)}</div>
+              <div class="pfc-d">${esc(s.d)}</div>
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              ${i>0?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveCPStep(${pi},${i},-1)">↑</button>`:""}
+              ${i<proc.steps.length-1?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveCPStep(${pi},${i},1)">↓</button>`:""}
+              <button class="del" onclick="delCPStep(${pi},${i})">✕</button>
+            </div>
+          </div>
+        </div>`).join("")}
+      </div>
+      <button class="btn-al" style="margin-top:8px;width:100%" onclick="addCPStep(${pi})">＋ Ajouter une étape</button>
+    </div>`).join("");
+}
+
+function addCampProcess(){
+  document.getElementById("cp-title").value="";
+  document.getElementById("cp-steps").value="";
+  SEL_CP_ICON="📋";SEL_CP_COL="#e5322d";
+  document.querySelectorAll(".cp-icon-opt").forEach((el,i)=>el.style.background=i===0?"var(--s3)":"var(--s2)");
+  document.querySelectorAll(".cp-col-opt").forEach((el,i)=>el.classList.toggle("on",i===0));
+  openModal("mAddCampProcess");
+}
+function saveCampProcess(){
+  const c=cBy(ACT);if(!c)return;
+  const title=document.getElementById("cp-title").value.trim();
+  if(!title){showNotif("⚠️ Entrez un titre","red");return;}
+  const rawSteps=document.getElementById("cp-steps").value.trim();
+  const steps=rawSteps?rawSteps.split("\n").filter(l=>l.trim()).map(l=>{const parts=l.split("|");return{t:parts[0].trim(),d:(parts[1]||"").trim()}}):[{t:"Étape 1",d:""}];
+  if(!c.processes)c.processes=[];
+  c.processes.push({id:"cp"+Date.now(),title,icon:SEL_CP_ICON,color:SEL_CP_COL,steps});
+  closeOv("mAddCampProcess");
+  renderCampProcess(c);
+  showNotif("✅ Processus créé","green");
+}
+function delCampProcess(pi){
+  if(!confirm("Supprimer ce processus ?"))return;
+  const c=cBy(ACT);if(!c)return;
+  c.processes.splice(pi,1);
+  renderCampProcess(c);
+  showNotif("Processus supprimé","blue");
+}
+function addCPStep(pi){
+  const c=cBy(ACT);if(!c)return;
+  const t=prompt("Titre de l'étape:");if(!t)return;
+  const d=prompt("Description (optionnel):")||"";
+  c.processes[pi].steps.push({t,d});
+  renderCampProcess(c);
+}
+function delCPStep(pi,si){
+  const c=cBy(ACT);if(!c)return;
+  c.processes[pi].steps.splice(si,1);
+  renderCampProcess(c);
+}
+function moveCPStep(pi,si,dir){
+  const c=cBy(ACT);if(!c)return;
+  const steps=c.processes[pi].steps;
+  const ni=si+dir;if(ni<0||ni>=steps.length)return;
+  [steps[si],steps[ni]]=[steps[ni],steps[si]];
+  renderCampProcess(c);
+}
+function pickCPIcon(el){
+  document.querySelectorAll(".cp-icon-opt").forEach(e=>e.style.background="var(--s2)");
+  el.style.background="var(--s3)";SEL_CP_ICON=el.dataset.icon;
+}
+function pickCPColor(el){
+  document.querySelectorAll(".cp-col-opt").forEach(e=>e.classList.remove("on"));
+  el.classList.add("on");SEL_CP_COL=el.dataset.col;
+}
+
+// ── MODALS ──
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeOv(id,e){if(e&&e.target.id!==id)return;document.getElementById(id).classList.remove("show")}
+function pickC(el){document.querySelectorAll(".csw").forEach(e=>e.classList.remove("on"));el.classList.add("on");SEL_C=el.dataset.c}
+function createCamp(){
+  const name=document.getElementById("m-name").value.trim();if(!name){document.getElementById("m-name").focus();return}
+  const c=mkCamp(name,document.getElementById("m-type").value,SEL_C,document.getElementById("m-stat").value);
+  c.lines=[{id:uid(),name:"Facebook Ads",cat:"digital",amount:0},{id:uid(),name:"Créa Visuelle",cat:"crea",amount:0}];
+  camps.push(c);ACT=c.id;closeOv("mCamp");renderSide();openCamp(c.id);
+  showNotif("✅ Campagne \""+name+"\" créée","green");
+}
+
+// ── LOGOS ──
+// ═══════════════════════════════════════════════════════
+// BRAND SETTINGS — Logos & Noms d'entreprises
+// ═══════════════════════════════════════════════════════
+let BRAND = {
+  name1: "AGITECH",
+  name2: "COFINA",
+  title: "Dashboard Marketing Pro",
+  subtitle: "Plateforme collaborative",
+  logos: [
+    {id:"lg-cofina", name:"COFINA",   src: null},
+    {id:"lg-ccbm",   name:"CCBM Shop",src: null}
+  ]
+};
+
+function renderLogos(){
+  const row = document.getElementById("logosRow");
+  if(!row) return;
+  // Remove all logo-wrap elements (keep the add button)
+  const existing = row.querySelectorAll(".logo-wrap,.vsep");
+  existing.forEach(el => el.remove());
+  const addBtn = row.querySelector(".logo-add");
+
+  BRAND.logos.forEach((logo, i) => {
+    if(i > 0){
+      const sep = document.createElement("div");
+      sep.className = "vsep";
+      row.insertBefore(sep, addBtn);
+    }
+    const wrap = document.createElement("div");
+    wrap.className = "logo-wrap";
+    wrap.id = logo.id;
+    if(logo.src){
+      const img = document.createElement("img");
+      img.className = "logo-img";
+      img.src = logo.src;
+      img.alt = logo.name;
+      img.title = logo.name;
+      wrap.appendChild(img);
+    } else {
+      // Text fallback
+      const span = document.createElement("div");
+      span.style.cssText = "font-size:13px;font-weight:800;color:var(--gold);letter-spacing:.04em;padding:2px 6px;background:var(--s2);border-radius:5px;border:var(--bd)";
+      span.textContent = logo.name;
+      wrap.appendChild(span);
+    }
+    const del = document.createElement("button");
+    del.className = "logo-del";
+    del.title = "Supprimer";
+    del.textContent = "✕";
+    del.onclick = (()=>{const lid=logo.id; return ()=>removeBrandLogo(lid);})();
+    wrap.appendChild(del);
+    row.insertBefore(wrap, addBtn);
+  });
+
+  // Also update auth screen logos
+  renderAuthLogos();
+  // Update all text references
+  updateBrandText();
+}
+
+function renderAuthLogos(){
+  const authRow = document.getElementById("authLogoRow");
+  if(!authRow) return;
+  authRow.innerHTML = "";
+  BRAND.logos.forEach((logo, i) => {
+    if(i > 0){
+      const sep = document.createElement("div");
+      sep.style.cssText = "width:1px;height:28px;background:#1f2840";
+      authRow.appendChild(sep);
+    }
+    if(logo.src){
+      const img = document.createElement("img");
+      img.style.cssText = "height:36px;object-fit:contain;border-radius:3px";
+      img.src = logo.src;
+      img.alt = logo.name;
+      authRow.appendChild(img);
+    } else {
+      const span = document.createElement("div");
+      span.style.cssText = "font-size:16px;font-weight:800;color:var(--gold)";
+      span.textContent = logo.name;
+      authRow.appendChild(span);
+    }
+  });
+}
+
+function updateBrandText(){
+  // Title tag
+  document.title = BRAND.title || "Dashboard Marketing Pro";
+
+  // Auth subtitle
+  const parts = [BRAND.name1, BRAND.name2].filter(Boolean);
+  const partnerStr = parts.length > 0 ? parts.join(" × ") + " · " : "";
+  const authSub = document.getElementById("authSubtitle");
+  if(authSub) authSub.textContent = partnerStr + (BRAND.subtitle || "Plateforme collaborative");
+
+  // Overview subtitle
+  const ovSub = document.getElementById("ovSubtitle");
+  if(ovSub) ovSub.textContent = (partnerStr || "") + "Logos · KPIs · Contenu IA · Réseaux Sociaux";
+
+  // Processus subtitle
+  const procSub = document.getElementById("procSubtitle");
+  if(procSub) procSub.textContent = "Processus globaux " + (partnerStr ? partnerStr.replace(" · ","") : "") + " — applicables à toutes les campagnes";
+
+  // Footer
+  const footer = document.getElementById("footerText");
+  if(footer) footer.textContent = (BRAND.title || "Dashboard Marketing Pro") + (partnerStr ? " · " + partnerStr.slice(0,-3) : "") + " · Toutes données confidentielles · 2026";
+}
+
+function openBrandSettings(){
+  // Fill in current values
+  document.getElementById("bs-name1").value = BRAND.name1 || "";
+  document.getElementById("bs-name2").value = BRAND.name2 || "";
+  document.getElementById("bs-title").value = BRAND.title || "";
+  document.getElementById("bs-subtitle").value = BRAND.subtitle || "";
+  document.getElementById("bs-l-name").value = "";
+  document.getElementById("bs-l-url").value = "";
+  document.getElementById("bs-l-file").value = "";
+  renderBsLogoList();
+  openModal("mBrandSettings");
+}
+
+function renderBsLogoList(){
+  const container = document.getElementById("bs-logo-list");
+  if(!container) return;
+  if(!BRAND.logos.length){
+    container.innerHTML = `<div style="font-size:11px;color:var(--muted);padding:8px">Aucun logo configuré. Ajoutez un logo ci-dessous.</div>`;
+    return;
+  }
+  container.innerHTML = BRAND.logos.map((logo,i) => `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;background:var(--s3);border-radius:10px;border:var(--bd);min-width:80px;max-width:110px;position:relative">
+      ${logo.src
+        ? `<img src="${logo.src}" alt="${esc(logo.name)}" style="height:32px;object-fit:contain;border-radius:3px;max-width:90px">`
+        : `<div style="font-size:14px;font-weight:800;color:var(--gold)">${esc(logo.name)}</div>`}
+      <div style="font-size:10px;color:var(--muted);text-align:center;word-break:break-word">${esc(logo.name)}</div>
+      <div style="display:flex;gap:4px">
+        ${i>0?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveBrandLogo(${i},-1)" title="←">←</button>`:""}
+        ${i<BRAND.logos.length-1?`<button class="del" style="font-size:10px;width:20px;height:20px" onclick="moveBrandLogo(${i},1)" title="→">→</button>`:""}
+        <button class="del" onclick="removeBrandLogo('${logo.id}')" title="Supprimer">✕</button>
+      </div>
+    </div>`).join("");
+}
+
+function moveBrandLogo(idx, dir){
+  const ni = idx + dir;
+  if(ni<0||ni>=BRAND.logos.length) return;
+  [BRAND.logos[idx], BRAND.logos[ni]] = [BRAND.logos[ni], BRAND.logos[idx]];
+  renderBsLogoList();
+}
+
+function removeBrandLogo(id){
+  BRAND.logos = BRAND.logos.filter(l => l.id !== id);
+  renderBsLogoList();
+  renderLogos();
+  showNotif("Logo supprimé","blue");
+}
+
+function bsAddLogo(){
+  const name = document.getElementById("bs-l-name").value.trim();
+  const url  = document.getElementById("bs-l-url").value.trim();
+  const file = document.getElementById("bs-l-file").files[0];
+  if(!name){showNotif("⚠️ Entrez le nom de l'entreprise","red");return;}
+  const insert = src => {
+    BRAND.logos.push({id:"lg-"+Date.now(), name, src});
+    document.getElementById("bs-l-name").value = "";
+    document.getElementById("bs-l-url").value = "";
+    document.getElementById("bs-l-file").value = "";
+    renderBsLogoList();
+    showNotif("✅ Logo ajouté","green");
+  };
+  if(file){
+    const r = new FileReader();
+    r.onload = e => insert(e.target.result);
+    r.readAsDataURL(file);
+  } else if(url){
+    insert(url);
+  } else {
+    // No image: add text-only entry
+    insert(null);
+    document.getElementById("bs-l-name").value="";
+    renderBsLogoList();
+    showNotif("✅ Entreprise ajoutée (sans logo)","green");
+  }
+}
+
+function saveBrandSettings(){
+  BRAND.name1    = document.getElementById("bs-name1").value.trim();
+  BRAND.name2    = document.getElementById("bs-name2").value.trim();
+  BRAND.title    = document.getElementById("bs-title").value.trim() || "Dashboard Marketing Pro";
+  BRAND.subtitle = document.getElementById("bs-subtitle").value.trim() || "Plateforme collaborative";
+  renderLogos();
+  closeOv("mBrandSettings");
+  showNotif("✅ Paramètres enregistrés","green");
+}
+
+// Legacy compat — kept for any old references
+function addLogo(){ openBrandSettings(); }
+function removeLogo(id){ removeBrandLogo(id); }
+
+// ── SIDEBAR MOBILE TOGGLE ──
+function toggleSidebar(){
+  const side=document.querySelector(".side");
+  const overlay=document.getElementById("sideOverlay");
+  const btn=document.getElementById("hamBtn");
+  if(side.classList.contains("open")){
+    side.classList.remove("open");
+    overlay.classList.remove("show");
+    btn.textContent="☰";
+  } else {
+    side.classList.add("open");
+    overlay.classList.add("show");
+    btn.textContent="✕";
+  }
+}
+function closeSidebar(){
+  const side=document.querySelector(".side");
+  const overlay=document.getElementById("sideOverlay");
+  const btn=document.getElementById("hamBtn");
+  side.classList.remove("open");
+  overlay.classList.remove("show");
+  btn.textContent="☰";
+}
+// Close sidebar when nav item clicked on mobile
+document.addEventListener("click",function(e){
+  if(e.target.classList.contains("ni")||e.target.classList.contains("cc")){
+    if(window.innerWidth<=768)closeSidebar();
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// ADS CONNECT — Intégration Meta, Google, LinkedIn, TikTok
+// ═══════════════════════════════════════════════════════
+
+let ADS_BACKEND_URL = localStorage.getItem('ads_backend_url') || 'http://localhost:3001';
+const ADS_PLATFORM_COLORS = {
+  meta: '#1877f2',
+  google: '#34a853',
+  linkedin: '#0a66c2',
+  tiktok: '#69C9D0'
+};
+const ADS_PLATFORM_LABELS = {
+  meta: '📘 Meta',
+  google: '🔵 Google',
+  linkedin: '💼 LinkedIn',
+  tiktok: '🎵 TikTok'
+};
+
+function initAdsConnect() {
+  const urlInput = document.getElementById('ads-backend-url');
+  if (urlInput) urlInput.value = ADS_BACKEND_URL;
+  // Set default dates: last 30 days
+  const today = new Date().toISOString().split('T')[0];
+  const d30 = new Date(); d30.setDate(d30.getDate() - 30);
+  const from = d30.toISOString().split('T')[0];
+  const fromEl = document.getElementById('ads-date-from');
+  const toEl = document.getElementById('ads-date-to');
+  if (fromEl && !fromEl.value) fromEl.value = from;
+  if (toEl && !toEl.value) toEl.value = today;
+}
+
+async function testBackend() {
+  const urlInput = document.getElementById('ads-backend-url');
+  ADS_BACKEND_URL = (urlInput.value || '').trim().replace(/\/$/, '');
+  if (!ADS_BACKEND_URL) { showNotif('⚠️ Entrez l\'URL du backend','red'); return; }
+  localStorage.setItem('ads_backend_url', ADS_BACKEND_URL);
+  const statusEl = document.getElementById('backend-status');
+  statusEl.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--purple)"><span class="spinner"></span> Test de connexion...</div>`;
+  try {
+    const r = await fetch(`${ADS_BACKEND_URL}/`, { signal: AbortSignal.timeout(8000) });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      statusEl.innerHTML = `<div style="background:rgba(15,204,160,.1);border:1px solid rgba(15,204,160,.25);border-radius:8px;padding:10px;font-size:11px">
+        <div style="color:var(--teal);font-weight:700;margin-bottom:4px">✅ Backend connecté avec succès !</div>
+        <div style="color:var(--muted)">Version ${d.version} · Plateformes: ${d.platforms.join(', ')}</div>
+      </div>`;
+      showNotif('✅ Backend connecté !', 'green');
+    } else {
+      throw new Error('Réponse inattendue');
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<div class="ads-error">❌ Impossible de joindre le backend: ${e.message}<br><span style="color:var(--muted)">Vérifiez que le serveur est démarré et que l'URL est correcte.</span></div>`;
+  }
+}
+
+function setDotStatus(platform, status) {
+  const dot = document.getElementById(`dot-${platform}`);
+  if (!dot) return;
+  const colors = { ok: '#0fcca0', error: '#e5322d', loading: '#f0a830', idle: '#2a3450' };
+  dot.style.background = colors[status] || colors.idle;
+  dot.title = { ok: 'Connecté', error: 'Erreur', loading: 'Chargement...', idle: 'Non connecté' }[status] || '';
+}
+
+function renderAdsMetrics(platform, data) {
+  const metricsEl = document.getElementById(`metrics-${platform}`);
+  const tableEl = document.getElementById(`ads-table-${platform}`);
+  if (!metricsEl) return;
+
+  let campaigns = [];
+  let totals = { impressions: 0, clicks: 0, spend: 0, conversions: 0 };
+
+  if (platform === 'meta' && data.totals) {
+    // Summary endpoint
+    totals = data.totals;
+    metricsEl.innerHTML = renderMetricBoxes(totals, platform);
+    if (tableEl) tableEl.innerHTML = '';
+    return;
+  }
+
+  campaigns = data.campaigns || [];
+  campaigns.forEach(c => {
+    const ins = c.insights || {};
+    totals.impressions += ins.impressions || 0;
+    totals.clicks += ins.clicks || 0;
+    totals.spend += ins.spend || 0;
+    totals.conversions += (ins.conversions || ins.leads || 0);
+  });
+
+  metricsEl.innerHTML = renderMetricBoxes(totals, platform);
+
+  if (tableEl && campaigns.length > 0) {
+    tableEl.innerHTML = `
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:10px 0 6px">Campagnes (${campaigns.length})</div>
+      ${campaigns.slice(0, 8).map(c => {
+        const ins = c.insights || {};
+        const statusColor = (c.status === 'ACTIVE' || c.status === 'ENABLED') ? '#0fcca0' : '#5a6a8a';
+        return `<div class="ads-camp-row">
+          <div class="ads-camp-name">
+            <div style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${statusColor};margin-right:5px;vertical-align:middle"></div>
+            ${esc(c.name)}
+          </div>
+          <div class="ads-camp-stat">
+            <div>${(ins.impressions||0).toLocaleString('fr-FR')} impressions</div>
+            <div>${(ins.clicks||0).toLocaleString('fr-FR')} clics · ${fmtSpend(ins.spend||0)}</div>
+          </div>
+        </div>`;
+      }).join('')}
+      ${campaigns.length > 8 ? `<div style="text-align:center;font-size:10px;color:var(--muted);padding:6px">+${campaigns.length-8} autres campagnes</div>` : ''}
+    `;
+  } else if (tableEl) {
+    tableEl.innerHTML = `<div style="font-size:11px;color:var(--muted);padding:10px 0;font-style:italic">Aucune campagne active sur la période</div>`;
+  }
+}
+
+function renderMetricBoxes(totals, platform) {
+  const col = ADS_PLATFORM_COLORS[platform] || '#8b5cf6';
+  const ctr = totals.impressions > 0 ? ((totals.clicks/totals.impressions)*100).toFixed(2) : '0.00';
+  return `
+    <div class="ads-metric-box"><div class="ads-metric-val" style="color:${col}">${fmtBigNum(totals.impressions)}</div><div class="ads-metric-lbl">Impressions</div></div>
+    <div class="ads-metric-box"><div class="ads-metric-val" style="color:${col}">${fmtBigNum(totals.clicks)}</div><div class="ads-metric-lbl">Clics</div></div>
+    <div class="ads-metric-box"><div class="ads-metric-val" style="color:var(--gold)">${fmtSpend(totals.spend)}</div><div class="ads-metric-lbl">Dépenses</div></div>
+    <div class="ads-metric-box"><div class="ads-metric-val" style="color:var(--teal)">${ctr}%</div><div class="ads-metric-lbl">CTR</div></div>
+    ${totals.conversions > 0 ? `<div class="ads-metric-box"><div class="ads-metric-val" style="color:var(--purple)">${fmtBigNum(totals.conversions)}</div><div class="ads-metric-lbl">Conversions</div></div>` : ''}
+  `;
+}
+
+function fmtBigNum(n) {
+  if (!n) return '0';
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toLocaleString('fr-FR');
+}
+function fmtSpend(n) {
+  if (!n) return '0 €';
+  return parseFloat(n).toLocaleString('fr-FR', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
+}
+
+async function fetchAds(platform) {
+  ADS_BACKEND_URL = (document.getElementById('ads-backend-url')?.value || ADS_BACKEND_URL).trim().replace(/\/$/, '');
+  localStorage.setItem('ads_backend_url', ADS_BACKEND_URL);
+
+  const dateFrom = document.getElementById('ads-date-from')?.value || '';
+  const dateTo = document.getElementById('ads-date-to')?.value || '';
+  const metricsEl = document.getElementById(`metrics-${platform}`);
+  const tableEl = document.getElementById(`ads-table-${platform}`);
+
+  if (metricsEl) metricsEl.innerHTML = `<div class="ads-loader"><span class="spinner"></span> Chargement des données ${ADS_PLATFORM_LABELS[platform]}...</div>`;
+  if (tableEl) tableEl.innerHTML = '';
+  setDotStatus(platform, 'loading');
+
+  // Choose endpoint
+  const endpointMap = {
+    meta: '/api/meta/summary',
+    google: '/api/google/campaigns',
+    linkedin: '/api/linkedin/campaigns',
+    tiktok: '/api/tiktok/campaigns'
+  };
+  const qs = new URLSearchParams({date_from: dateFrom, date_to: dateTo}).toString();
+  const url = `${ADS_BACKEND_URL}${endpointMap[platform]}?${qs}`;
+
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(30000) });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    renderAdsMetrics(platform, data);
+    setDotStatus(platform, 'ok');
+    showNotif(`✅ ${ADS_PLATFORM_LABELS[platform]} importé !`, 'green');
+    updateGlobalSummary();
+  } catch (e) {
+    setDotStatus(platform, 'error');
+    if (metricsEl) metricsEl.innerHTML = `<div class="ads-error">❌ ${e.message}<br><span style="color:var(--muted)">Vérifiez votre backend et vos clés API dans le fichier .env</span></div>`;
+    showNotif(`⚠️ Erreur ${ADS_PLATFORM_LABELS[platform]}: ${e.message}`, 'red');
+  }
+}
+
+async function fetchAllAds() {
+  showNotif('📥 Import de toutes les plateformes...', 'blue');
+  await Promise.all(['meta', 'google', 'linkedin', 'tiktok'].map(p => fetchAds(p)));
+}
+
+function updateGlobalSummary() {
+  // Collect all loaded data from metric boxes
+  const summaryEl = document.getElementById('ads-global-summary');
+  const kpisEl = document.getElementById('ads-global-kpis');
+  if (!summaryEl || !kpisEl) return;
+
+  // Check if any platform is loaded
+  const platforms = ['meta','google','linkedin','tiktok'];
+  const anyLoaded = platforms.some(p => {
+    const dot = document.getElementById(`dot-${p}`);
+    return dot && dot.style.background.includes('15, 204, 160');
+  });
+
+  if (anyLoaded) {
+    summaryEl.style.display = 'block';
+    kpisEl.innerHTML = platforms.map(p => {
+      const dot = document.getElementById(`dot-${p}`);
+      const loaded = dot && dot.style.background.includes('15, 204, 160');
+      const col = ADS_PLATFORM_COLORS[p];
+      // Read metric values from rendered metric boxes
+      const metricEl = document.getElementById(`metrics-${p}`);
+      const vals = metricEl ? [...metricEl.querySelectorAll('.ads-metric-val')].map(el => el.textContent.trim()) : [];
+      return `<div class="k" style="--ka:${col}">
+        <div class="kl" style="color:${col}">${ADS_PLATFORM_LABELS[p]}</div>
+        <div class="kv" style="color:${col}">${loaded ? (vals[2]||'—') : '—'}</div>
+        <div class="ks">${loaded ? `${vals[0]||'0'} imp. · ${vals[1]||'0'} clics` : 'Non chargé'}</div>
+      </div>`;
+    }).join('');
+  } else {
+    summaryEl.style.display = 'none';
+  }
+}
+
+// ── INIT ──
+document.getElementById("dateLbl").textContent=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"long",year:"numeric"});
+document.getElementById("m-name").addEventListener("keydown",e=>{if(e.key==="Enter")createCamp()});
+
+// Initialize BRAND logos from hidden stored images
+(function(){
+  const ccbmImg = document.getElementById("__storedCCBM");
+  if(ccbmImg && ccbmImg.src) BRAND.logos[1].src = ccbmImg.src;
+  // COFINA src will be text-fallback if not found
+})();
+
+camps.push(mkCamp("AGITECH × COFINA — Lancement","partenariat","#e5322d","active"));
+ACT=camps[0].id;
+renderDemoUsers();
+renderSide();
+renderOv();
+renderGlobalProcess();
+renderLogos();
+</script>
+
+<img id="__storedCCBM" src="data:image/png;base64,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SUxPcBzLQ9g3h6M4XG8qOStdrugim3/YjLc004+LvF7u0I8eDM+Aaq40pJWw6ptMltLhWtrYew3eZeXgAevOCOoJXoqenmlphIZjmIvvovOVNRDFVGMQtyg221Wg6zYnoGjpZaurrLlT08LC+WWSsa1rGjiSSW4AChtBYdhdddG26DUlzEz37jHSufHG53cHujDf28eimPlQyVrNn9Kyn3xTSXGMVW7yLQ15aHeG+Gn0hqzWQCCCMg8wtMOimqYekfK7sK3xKWGlm6NkTe0fJadi2G6HY8Of7aSj5LqrAP0AFTLS2kNN6Xjc2x2inpHuG6+UZfK8dxe4lxHhlePZLLXTbNbBJcS81DqJnF5Jc5nxCc8yW7pUoVBU1E5cY3vJAPHRegpqeANbIxgBI4aooXrjZppzWF5ju12fXNqI6dtOOwmDW7jXOcOGDxy8qaIuEUr4nZmGxUiWFkrcrxcLjaN05b9KWKOzWt07qaN73tMz952XHJ44HUrsoi1e4vcXONyVsxjWNDWiwCrKs2I6Mqqueplkuu/NI6R+KkAZcST8XxVmoi6S1Es1ukdey5xU8UNzG0C6+FfR0lwo5aKupoaqmmbuyRSsDmPHcQeBVY3vYVpCtqHTUFTcrXn+6ilEkY9AeC7/AFYVqosw1MsH4biFielhn/EaCqntGwfSdLUNlr626XFo/uXytjYfTuAO+hwVnWq3UFqoI6C20cFJSxDDIoWBrR6h18eq9SJNVTT/AIjiViCkhg/DaAixhtJ/9eal/SlV9q5bPVFap2G3e8aiut0iv9DEytq5qhrHQPJaHvLgCc9Mqywapip5HGQ2uFW41Sy1EbRE29irCu+h9O6x01a23mjJnipIxFUwu3JoxujgHdR4EEdcKJRbANNCfekvd6fFnzQ6IE+k7n/hWxbKd1JbaWle4OdDCyMuHIkNAz+xehQmV08V2seQFOfQU8pDpGAlcPSGktP6TpHU9jt0dP2mO1lJL5ZMfKeeJHPA5DPABdxEUV73PdmcblSmMaxoa0WCIiLVbIiIiIiIiIiIiIiIiIiIiLh6x0nYtW29lFfKMTtjcXRSNcWSRE8y1w4jxHI4GQVxtF7L9J6UuAuNBTT1FawERz1Uu+6PIwd0ABoOOGcZwSM8Spqi7NqJWsMYccvBcHU0LniQtGbjZea62+iulunt9xpo6qknbuSxSDLXD/8Acc9CoDQbFdCUlyFY6kq6ljXbzaaoqC+EeBHNw8HEg9cqx0SKoliBDHEArMtNDKQZGgkcQvxoDWhrQAAMADov1EXFdkRERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERF//2Q==" style="display:none" alt="stored-ccbm"/>
+</body>
+</html>
